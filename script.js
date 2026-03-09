@@ -1,393 +1,896 @@
 /**
- * Md Faiyaz Ansari — Portfolio v2
- * JavaScript: Modular, performance-optimised, accessible
+ * ═══════════════════════════════════════════════════════════
+ *  MD FAIYAZ ANSARI — PORTFOLIO v4  ★ PREMIUM 3D UPGRADE
+ *  script.js — All interactive features
  *
- * Modules:
- *  1. CustomCursor      — pointer:fine devices only
- *  2. NavigationManager — scroll state, active link, hamburger
- *  3. ReadingProgress   — header progress bar
- *  4. ScrollReveal      — IntersectionObserver-based reveals
- *  5. SkillBars         — animate widths when visible
- *  6. SmoothScroll      — accessible anchor scroll
- *  7. ContactForm       — validation + success state
+ *  MODULES:
+ *  1.  Loading Screen         — progress + arc animation
+ *  2.  Theme Toggle           — dark/light with localStorage
+ *  3.  Custom Cursor          — magnetic, label, click states
+ *  4.  Three.js Hero          — 3D particle field
+ *  5.  GSAP Scroll Animations — reveal, parallax, stagger
+ *  6.  Skill Bar Animation    — fills on scroll into view
+ *  7.  Counter Animation      — counting-up numbers
+ *  8.  3D Card Tilt           — pointer-follow perspective
+ *  9.  Card Shine Effect      — light sweep on mouse move
+ *  10. Typewriter Effect      — hero tagline roles
+ *  11. Nav Behaviour          — scroll state, active link, progress
+ *  12. Hamburger / Drawer     — mobile menu
+ *  13. Smooth Scroll          — intercept all anchor clicks
+ *  14. Back to Top Button
+ *  15. Contact Form           — validation + success state
+ *  16. Magnetic Buttons       — subtle pull-toward-cursor
+ *  17. Parallax Orbs          — gentle mouse-parallax on orbs
+ * ═══════════════════════════════════════════════════════════
  */
 
-'use strict';
+/* ───────────────────────────────────────────────────────────
+   UTILITIES
+─────────────────────────────────────────────────────────── */
+const $  = (s, p = document) => p.querySelector(s);
+const $$ = (s, p = document) => [...p.querySelectorAll(s)];
+const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+const lerp  = (a, b, t) => a + (b - a) * t;
+const isMobile = () => window.innerWidth <= 768;
+const isFinePointer = () => window.matchMedia('(pointer: fine)').matches;
 
-/* ─────────────────────────────────
-   1. CUSTOM CURSOR
-   Only initialised on fine-pointer devices
-───────────────────────────────── */
-class CustomCursor {
-  constructor() {
-    this.dot  = document.querySelector('.cursor__dot');
-    this.ring = document.querySelector('.cursor__ring');
-    if (!this.dot || !this.ring) return;
 
-    // Only activate on devices with a mouse
-    if (!window.matchMedia('(pointer: fine)').matches) {
-      document.querySelector('.cursor')?.remove();
+
+/* ───────────────────────────────────────────────────────────
+   2. THEME TOGGLE  (dark ↔ light)
+─────────────────────────────────────────────────────────── */
+(function initTheme() {
+  const btn  = $('#themeToggle');
+  const html = document.documentElement;
+
+  // Persist preference
+  const saved = localStorage.getItem('fa-theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+
+  btn && btn.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next    = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('fa-theme', next);
+
+    // Briefly pulse the toggle button
+    btn.style.transform = 'scale(0.85)';
+    setTimeout(() => btn.style.transform = '', 200);
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   CUSTOM CURSOR — from scratch
+   #fa-cursor wrapper moves via transform (GPU layer).
+   .fac__outer  = large ring, lags behind mouse (lerp 0.10)
+   .fac__inner  = small dot, snaps exactly to mouse
+   .fac__text   = label pill, fades in on hover
+─────────────────────────────────────────────────────────── */
+(function initCursor() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+
+  const wrap  = document.getElementById('fa-cursor');
+  const outer = wrap && wrap.querySelector('.fac__outer');
+  const inner = wrap && wrap.querySelector('.fac__inner');
+  const text  = document.getElementById('faCursorText');
+  if (!wrap || !outer || !inner) return;
+
+  // Raw mouse — updated on every mousemove
+  let mx = -300, my = -300;
+  // Outer ring lerped position
+  let ox = -300, oy = -300;
+
+  // ── RAF loop ─────────────────────────────────────────────
+  function tick() {
+    // Lerp outer ring toward mouse (slower = more lag)
+    ox += (mx - ox) * 0.10;
+    oy += (my - oy) * 0.10;
+
+    // Inner dot sits exactly on mouse — move the wrapper there
+    wrap.style.transform  = `translate(${mx}px, ${my}px)`;
+    // Outer ring independently lags behind using its own translate
+    outer.style.transform = `translate(${ox - mx}px, ${oy - my}px)`;
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // ── Mouse tracking ───────────────────────────────────────
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+  }, { passive: true });
+
+  // ── Hover: detect interactive targets ───────────────────
+  const SEL = 'a, button, [data-cursor], .tilt-card, .magnetic, label, input, textarea';
+
+  document.addEventListener('mouseover', e => {
+    const t = e.target.closest(SEL);
+    if (!t) return;
+    wrap.classList.add('fac--hover');
+    if (text) text.textContent = t.getAttribute('data-cursor') || '';
+  });
+
+  document.addEventListener('mouseout', e => {
+    const t = e.target.closest(SEL);
+    if (!t || t.contains(e.relatedTarget)) return;
+    wrap.classList.remove('fac--hover');
+    if (text) text.textContent = '';
+  });
+
+  // ── Click ────────────────────────────────────────────────
+  document.addEventListener('mousedown', () => wrap.classList.add('fac--click'));
+  document.addEventListener('mouseup',   () => wrap.classList.remove('fac--click'));
+
+  // ── Visibility ──────────────────────────────────────────
+  document.documentElement.addEventListener('mouseleave', () => { wrap.style.opacity = '0'; });
+  document.documentElement.addEventListener('mouseenter', () => { wrap.style.opacity = '1'; });
+})();
+
+
+/* ───────────────────────────────────────────────────────────
+   4. THREE.JS HERO PARTICLE FIELD
+   Wrapped in try/catch — CDN failure won't crash the page.
+─────────────────────────────────────────────────────────── */
+(function initThreeJS() {
+  try {
+  const canvas = $('#heroCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  // ─── Setup ───
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+  renderer.setClearColor(0x000000, 0);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+  camera.position.z = 80;
+
+  // Resolve accent colour from CSS variable (handles both themes)
+  function getAccentColor() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    return theme === 'light' ? 0x00a87e : 0x00e5a8;
+  }
+
+  // ─── Particle geometry ───
+  const PARTICLE_COUNT = isMobile() ? 600 : 1400;
+  const positions  = new Float32Array(PARTICLE_COUNT * 3);
+  const colors     = new Float32Array(PARTICLE_COUNT * 3);
+  const sizes      = new Float32Array(PARTICLE_COUNT);
+  const velocity   = new Float32Array(PARTICLE_COUNT * 3);
+
+  const colorA = new THREE.Color(getAccentColor()); // mint
+  const colorB = new THREE.Color(0x4d9fff);         // blue
+  const colorC = new THREE.Color(0xffffff);          // white
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    // Spread in a sphere
+    const theta = Math.random() * Math.PI * 2;
+    const phi   = Math.acos(Math.random() * 2 - 1);
+    const r     = 30 + Math.random() * 60;
+
+    positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i * 3 + 2] = r * Math.cos(phi) - 30;
+
+    // Random velocities for drift
+    velocity[i * 3]     = (Math.random() - 0.5) * 0.008;
+    velocity[i * 3 + 1] = (Math.random() - 0.5) * 0.006;
+    velocity[i * 3 + 2] = (Math.random() - 0.5) * 0.004;
+
+    // Mix colour palette
+    const mix  = Math.random();
+    const baseColor = mix < 0.5 ? colorA : mix < 0.8 ? colorB : colorC;
+    colors[i * 3]     = baseColor.r;
+    colors[i * 3 + 1] = baseColor.g;
+    colors[i * 3 + 2] = baseColor.b;
+
+    sizes[i] = Math.random() * 1.6 + 0.3;
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('color',    new THREE.BufferAttribute(colors,    3));
+  geometry.setAttribute('size',     new THREE.BufferAttribute(sizes,     1));
+
+  // Custom shader for circular, soft particles
+  const material = new THREE.ShaderMaterial({
+    vertexColors: true,
+    transparent: true,
+    depthWrite: false,
+    uniforms: {
+      uTime:        { value: 0 },
+      uMouseInfluence: { value: new THREE.Vector2(0, 0) },
+    },
+    vertexShader: `
+      attribute float size;
+      varying vec3 vColor;
+      uniform float uTime;
+      uniform vec2 uMouseInfluence;
+      void main() {
+        vColor = color;
+        vec3 pos = position;
+        // Gentle wave motion
+        pos.y += sin(uTime * 0.5 + pos.x * 0.03) * 0.4;
+        pos.x += cos(uTime * 0.4 + pos.z * 0.03) * 0.3;
+        // Mouse repulsion (subtle)
+        vec2 toMouse = pos.xy - uMouseInfluence * 80.0;
+        float dist   = length(toMouse);
+        if (dist < 20.0) {
+          float force = (20.0 - dist) / 20.0;
+          pos.xy += normalize(toMouse) * force * 2.5;
+        }
+        vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
+        gl_PointSize = size * (280.0 / -mvPos.z);
+        gl_Position  = projectionMatrix * mvPos;
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      void main() {
+        // Circular soft particle
+        vec2 uv = gl_PointCoord - 0.5;
+        float d = length(uv);
+        if (d > 0.5) discard;
+        float alpha = smoothstep(0.5, 0.1, d);
+        gl_FragColor = vec4(vColor, alpha * 0.75);
+      }
+    `
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  // ─── Connection lines between nearby particles (up to 80) ───
+  const lineMat = new THREE.LineBasicMaterial({
+    color: getAccentColor(), transparent: true, opacity: 0.04, depthWrite: false
+  });
+  function updateLineColor() {
+    lineMat.color.set(getAccentColor());
+  }
+
+  // ─── Resize handling ───
+  function onResize() {
+    const hero = $('#hero');
+    if (!hero) return;
+    const W = hero.offsetWidth, H = hero.offsetHeight;
+    renderer.setSize(W, H);
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+  }
+  onResize();
+  window.addEventListener('resize', onResize, { passive: true });
+
+  // ─── Mouse tracking ───
+  let mouseNorm = { x: 0, y: 0 };
+  let targetRot = { x: 0, y: 0 };
+
+  document.addEventListener('mousemove', e => {
+    mouseNorm.x = (e.clientX / window.innerWidth  - 0.5);
+    mouseNorm.y = (e.clientY / window.innerHeight - 0.5);
+  }, { passive: true });
+
+  // ─── Animation loop ───
+  let clock = { t: 0 };
+  let lastTime = 0;
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    const dt = (time - lastTime) * 0.001;
+    lastTime  = time;
+    clock.t  += dt;
+
+    // Smooth camera rotation follows mouse
+    targetRot.x = lerp(targetRot.x, mouseNorm.y *  0.3, 0.04);
+    targetRot.y = lerp(targetRot.y, mouseNorm.x * -0.4, 0.04);
+    particles.rotation.x += (targetRot.x - particles.rotation.x) * 0.06;
+    particles.rotation.y += (targetRot.y - particles.rotation.y) * 0.06;
+
+    // Slow auto-rotation
+    particles.rotation.y += 0.0005;
+
+    // Update shader time + mouse
+    material.uniforms.uTime.value = clock.t;
+    material.uniforms.uMouseInfluence.value.set(mouseNorm.x, -mouseNorm.y);
+
+    renderer.render(scene, camera);
+  }
+  animate(0);
+
+  // Update particle colour on theme change
+  const observer = new MutationObserver(() => {
+    const c = new THREE.Color(getAccentColor());
+    colorA.set(c);
+    updateLineColor();
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  } catch(e) {
+    // Three.js unavailable or WebGL not supported — page still works fine
+    console.warn('Three.js particle field skipped:', e.message);
+  }
+})();
+
+/* ───────────────────────────────────────────────────────────
+   5. GSAP SCROLL ANIMATIONS
+   Progressive reveal + stagger effects triggered by scroll.
+   Falls back to IntersectionObserver if GSAP unavailable.
+─────────────────────────────────────────────────────────── */
+(function initScrollAnimations() {
+
+  /* — CSS fallback (always runs, ensures elements become visible) — */
+  function setupRevealObserver() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+
+          // Stagger children if parent has data-stagger
+          if (e.target.dataset.stagger) {
+            $$('[data-stagger-child]', e.target).forEach((child, i) => {
+              child.style.transitionDelay = `${i * 80}ms`;
+              child.classList.add('visible');
+            });
+          }
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    $$('.reveal').forEach(el => io.observe(el));
+  }
+  setupRevealObserver();
+
+  /* — GSAP enhanced animations (if available) — */
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Section titles split character animation
+  $$('.section__title').forEach(title => {
+    gsap.from(title, {
+      scrollTrigger: { trigger: title, start: 'top 85%', once: true },
+      y: 40, opacity: 0, duration: 1, ease: 'power4.out',
+      clearProps: 'all'
+    });
+  });
+
+  // Stagger skill cards
+  gsap.from('.skill-card', {
+    scrollTrigger: { trigger: '.skills__grid', start: 'top 80%', once: true },
+    y: 50, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+    clearProps: 'all'
+  });
+
+  // Stagger tech pills
+  gsap.from('.tech-pill', {
+    scrollTrigger: { trigger: '.tech-wall__grid', start: 'top 85%', once: true },
+    scale: 0.7, opacity: 0, duration: 0.4, stagger: 0.04, ease: 'back.out(2)',
+    clearProps: 'all'
+  });
+
+  // Project cards stagger
+  gsap.from('.project', {
+    scrollTrigger: { trigger: '.projects__grid', start: 'top 80%', once: true },
+    y: 60, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+    clearProps: 'all'
+  });
+
+  // Timeline items slide in from left
+  gsap.from('.timeline__item', {
+    scrollTrigger: { trigger: '.timeline', start: 'top 80%', once: true },
+    x: -40, opacity: 0, duration: 0.7, stagger: 0.2, ease: 'power3.out',
+    clearProps: 'all'
+  });
+
+  // Cred cards stagger
+  gsap.from('.cred', {
+    scrollTrigger: { trigger: '.creds', start: 'top 85%', once: true },
+    x: 30, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power3.out',
+    clearProps: 'all'
+  });
+
+  // Parallax on section alt backgrounds
+  $$('.section--alt').forEach(section => {
+    gsap.to(section, {
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom', end: 'bottom top',
+        scrub: 1.5
+      },
+      backgroundPositionY: '30%',
+      ease: 'none'
+    });
+  });
+
+  // Hero stats count up triggered by scroll
+  ScrollTrigger.create({
+    trigger: '.hero__stats',
+    start: 'top 90%',
+    once: true,
+    onEnter: () => startCounters()
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   6. SKILL BAR ANIMATION
+   Fills progress bars when they scroll into view.
+─────────────────────────────────────────────────────────── */
+(function initSkillBars() {
+  const bars = $$('.bar span');
+  if (!bars.length) return;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const targetWidth = e.target.style.getPropertyValue('--w') ||
+                            e.target.style.width || '0%';
+        e.target.style.width = targetWidth;
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  bars.forEach(bar => {
+    // Store width as CSS variable if set inline as 'width'
+    const w = bar.style.width;
+    if (w) {
+      bar.style.setProperty('--w', w);
+      bar.style.width = '0%'; // reset before animation
+    }
+    io.observe(bar);
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   7. COUNTER ANIMATION
+   Counts up from 0 to data-target value.
+─────────────────────────────────────────────────────────── */
+let countersStarted = false;
+
+function startCounters() {
+  if (countersStarted) return;
+  countersStarted = true;
+
+  $$('.counter').forEach(el => {
+    const target  = parseInt(el.dataset.target, 10);
+    const duration = 1800;
+    const start    = performance.now();
+
+    function tick(now) {
+      const elapsed  = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased    = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target);
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+// Also trigger on intersection in case GSAP isn't available
+(function() {
+  const statsEl = $('.hero__stats');
+  if (!statsEl) return;
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      startCounters();
+      io.disconnect();
+    }
+  }, { threshold: 0.5 });
+  io.observe(statsEl);
+})();
+
+/* ───────────────────────────────────────────────────────────
+   8 & 9. 3D CARD TILT + SHINE EFFECT
+   Cards rotate on mouse-move for a 3D parallax illusion.
+   A light-sweep shine follows the pointer.
+─────────────────────────────────────────────────────────── */
+(function initTiltCards() {
+  if (isMobile()) return; // Disable on touch/mobile
+
+  const TILT_MAX  = 12;    // max tilt degrees
+  const SHINE_W   = 600;   // shine gradient diameter (px)
+
+  $$('.tilt-card').forEach(card => {
+    let rafId = null;
+    let currentRX = 0, currentRY = 0;
+    let targetRX  = 0, targetRY  = 0;
+
+    function onMove(e) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width  / 2;
+      const cy = rect.height / 2;
+
+      targetRY =  ((x - cx) / cx) * TILT_MAX;
+      targetRX = -((y - cy) / cy) * TILT_MAX;
+
+      // Update shine gradient position
+      const shine = card.querySelector('.card-shine');
+      if (shine) {
+        const px = (x / rect.width  * 100).toFixed(1) + '%';
+        const py = (y / rect.height * 100).toFixed(1) + '%';
+        shine.style.setProperty('--mx', px);
+        shine.style.setProperty('--my', py);
+      }
+    }
+
+    function animate() {
+      currentRX = lerp(currentRX, targetRX, 0.1);
+      currentRY = lerp(currentRY, targetRY, 0.1);
+
+      card.style.transform =
+        `perspective(800px) rotateX(${currentRX}deg) rotateY(${currentRY}deg) translateZ(4px)`;
+      card.style.transition = 'box-shadow 300ms, border-color 300ms';
+
+      if (Math.abs(currentRX - targetRX) > 0.05 || Math.abs(currentRY - targetRY) > 0.05) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        rafId = null;
+      }
+    }
+
+    function onLeave() {
+      targetRX = 0;
+      targetRY = 0;
+      if (!rafId) rafId = requestAnimationFrame(animate);
+
+      const shine = card.querySelector('.card-shine');
+      if (shine) {
+        shine.style.setProperty('--mx', '50%');
+        shine.style.setProperty('--my', '0%');
+      }
+    }
+
+    card.addEventListener('mousemove', e => {
+      onMove(e);
+      if (!rafId) rafId = requestAnimationFrame(animate);
+    });
+    card.addEventListener('mouseleave', onLeave);
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   10. TYPEWRITER EFFECT
+   Cycles through developer roles in hero tagline.
+─────────────────────────────────────────────────────────── */
+(function initTypewriter() {
+  const el = $('#typewriterText');
+  if (!el) return;
+
+  const phrases = [
+    'scale reliably.',
+    'handle millions of requests.',
+    'never go down.',
+    'stay secure & fast.',
+    'power real products.',
+    'are built to last.',
+    'make engineers proud.',
+    'ship on time.'
+  ];
+
+  let phraseIdx = 0;
+  let charIdx   = 0;
+  let deleting  = false;
+  let pausing   = false;
+
+  function tick() {
+    const phrase = phrases[phraseIdx];
+
+    if (pausing) return;
+
+    if (!deleting) {
+      el.textContent = phrase.slice(0, charIdx + 1);
+      charIdx++;
+      if (charIdx >= phrase.length) {
+        // Pause at end of word
+        pausing = true;
+        setTimeout(() => { pausing = false; deleting = true; }, 1800);
+      }
+      setTimeout(tick, 55 + Math.random() * 30);
+    } else {
+      el.textContent = phrase.slice(0, charIdx - 1);
+      charIdx--;
+      if (charIdx <= 0) {
+        deleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        setTimeout(tick, 300);
+        return;
+      }
+      setTimeout(tick, 30);
+    }
+  }
+
+  // Start after short delay for page render
+  setTimeout(tick, 800);
+})();
+
+/* ───────────────────────────────────────────────────────────
+   11. NAV BEHAVIOUR
+   • Scroll progress bar
+   • Scrolled state (glassmorphism)
+   • Active section highlight
+─────────────────────────────────────────────────────────── */
+(function initNav() {
+  const nav      = $('#nav');
+  const progress = $('#navProgress');
+  const links    = $$('.nav__links a, .nav__drawer-link');
+
+  // Scroll progress bar + scrolled class
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total    = document.documentElement.scrollHeight - window.innerHeight;
+    const pct      = total > 0 ? (scrolled / total * 100) : 0;
+
+    if (progress) progress.style.width = pct + '%';
+    if (nav)      nav.classList.toggle('scrolled', scrolled > 30);
+  }, { passive: true });
+
+  // Active nav link via IntersectionObserver
+  const sections = $$('section[id]');
+  const sectionIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-60px 0px -40% 0px' });
+
+  sections.forEach(s => sectionIO.observe(s));
+})();
+
+/* ───────────────────────────────────────────────────────────
+   12. HAMBURGER / MOBILE DRAWER
+─────────────────────────────────────────────────────────── */
+(function initMobileMenu() {
+  const toggle = $('#navToggle');
+  const drawer = $('#navDrawer');
+  if (!toggle || !drawer) return;
+
+  function openDrawer() {
+    toggle.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    drawer.hidden = false;
+    // Animate in
+    drawer.style.opacity = '0';
+    drawer.style.transform = 'translateY(-10px)';
+    requestAnimationFrame(() => {
+      drawer.style.transition = 'opacity 250ms, transform 250ms';
+      drawer.style.opacity = '1';
+      drawer.style.transform = 'translateY(0)';
+    });
+  }
+
+  function closeDrawer() {
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    drawer.style.opacity = '0';
+    drawer.style.transform = 'translateY(-10px)';
+    setTimeout(() => { drawer.hidden = true; drawer.style.transition = ''; }, 260);
+  }
+
+  toggle.addEventListener('click', () => {
+    drawer.hidden ? openDrawer() : closeDrawer();
+  });
+
+  // Close on link click
+  $$('.nav__drawer-link, .nav__drawer-cta', drawer).forEach(a => {
+    a.addEventListener('click', closeDrawer);
+  });
+
+  // Close on outside click
+  document.addEventListener('click', e => {
+    if (!drawer.hidden && !$('#nav').contains(e.target)) closeDrawer();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !drawer.hidden) closeDrawer();
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   13. SMOOTH SCROLL
+   Intercepts anchor clicks and smoothly scrolls.
+─────────────────────────────────────────────────────────── */
+(function initSmoothScroll() {
+  document.addEventListener('click', e => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const id  = link.getAttribute('href');
+    const target = $(id);
+    if (!target) return;
+
+    e.preventDefault();
+    const navH   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 66;
+    const top    = target.getBoundingClientRect().top + window.scrollY - navH;
+
+    window.scrollTo({ top, behavior: 'smooth' });
+
+    // Update URL without jump
+    history.pushState(null, '', id);
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   14. BACK TO TOP BUTTON
+─────────────────────────────────────────────────────────── */
+(function initBackTop() {
+  const btn = $('#backTop');
+  if (!btn) return;
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('show', window.scrollY > 500);
+  }, { passive: true });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   15. CONTACT FORM
+   Client-side validation + animated success state.
+─────────────────────────────────────────────────────────── */
+(function initContactForm() {
+  const form    = $('#contactForm');
+  const success = $('#formSuccess');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name    = $('#cf-name');
+    const email   = $('#cf-email');
+    const message = $('#cf-message');
+    let valid     = true;
+
+    // Simple inline validation
+    [name, email, message].forEach(field => {
+      if (!field) return;
+      const ok = field.value.trim() &&
+        (field.type !== 'email' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()));
+      field.style.borderColor = ok ? '' : '#ef4444';
+      field.style.boxShadow   = ok ? '' : '0 0 0 3px rgba(239,68,68,0.15)';
+      if (!ok) valid = false;
+    });
+
+    if (!valid) {
+      // Shake animation on the form
+      form.style.animation = 'none';
+      form.offsetHeight; // reflow
+      form.style.animation = 'shake 400ms ease';
       return;
     }
 
-    this.mouseX = 0; this.mouseY = 0;
-    this.ringX = 0;  this.ringY = 0;
-    this.isVisible = false;
-
-    this._bindEvents();
-    this._animateRing();
-  }
-
-  _bindEvents() {
-    document.addEventListener('mousemove', (e) => {
-      this.mouseX = e.clientX;
-      this.mouseY = e.clientY;
-
-      if (!this.isVisible) {
-        this.dot.style.opacity = '1';
-        this.ring.style.opacity = '1';
-        this.isVisible = true;
-      }
-
-      this.dot.style.left = `${e.clientX}px`;
-      this.dot.style.top  = `${e.clientY}px`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-      this.dot.style.opacity = '0';
-      this.ring.style.opacity = '0';
-      this.isVisible = false;
-    });
-
-    // Hover effect on interactive elements
-    const interactives = 'a, button, [role="button"], input, textarea, select, label';
-    document.querySelectorAll(interactives).forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        document.querySelector('.cursor')?.classList.add('cursor--hover');
-      });
-      el.addEventListener('mouseleave', () => {
-        document.querySelector('.cursor')?.classList.remove('cursor--hover');
-      });
-    });
-  }
-
-  _animateRing() {
-    // Smooth lag on ring
-    const lerp = (a, b, t) => a + (b - a) * t;
-
-    const tick = () => {
-      this.ringX = lerp(this.ringX, this.mouseX, 0.12);
-      this.ringY = lerp(this.ringY, this.mouseY, 0.12);
-      this.ring.style.left = `${this.ringX}px`;
-      this.ring.style.top  = `${this.ringY}px`;
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
-}
-
-
-/* ─────────────────────────────────
-   2. NAVIGATION MANAGER
-───────────────────────────────── */
-class NavigationManager {
-  constructor() {
-    this.header    = document.getElementById('header');
-    this.hamburger = document.getElementById('navHamburger');
-    this.mobileNav = document.getElementById('mobileNav');
-    this.navLinks  = document.querySelectorAll('.nav__link');
-    this.sections  = document.querySelectorAll('section[id]');
-
-    if (!this.header) return;
-
-    this._initScrollState();
-    this._initHamburger();
-    this._initActiveLinks();
-  }
-
-  _initScrollState() {
-    const onScroll = () => {
-      this.header.classList.toggle('is-scrolled', window.scrollY > 20);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // Run once on init
-  }
-
-  _initHamburger() {
-    if (!this.hamburger || !this.mobileNav) return;
-
-    this.hamburger.addEventListener('click', () => {
-      const isOpen = this.hamburger.getAttribute('aria-expanded') === 'true';
-      this._setMobileMenu(!isOpen);
-    });
-
-    // Close on link click
-    this.mobileNav.querySelectorAll('.nav__mobile-link, .nav__mobile-cta').forEach(link => {
-      link.addEventListener('click', () => this._setMobileMenu(false));
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (!this.header.contains(e.target)) {
-        this._setMobileMenu(false);
-      }
-    });
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') this._setMobileMenu(false);
-    });
-  }
-
-  _setMobileMenu(open) {
-    this.hamburger.setAttribute('aria-expanded', String(open));
-    this.hamburger.classList.toggle('is-open', open);
-    if (open) {
-      this.mobileNav.removeAttribute('hidden');
-    } else {
-      this.mobileNav.setAttribute('hidden', '');
+    // Simulate async send
+    const submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.querySelector('span').textContent = 'Sending...';
     }
-  }
 
-  _initActiveLinks() {
-    if (!this.sections.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            this.navLinks.forEach(link => {
-              const matches = link.getAttribute('data-section') === id;
-              link.classList.toggle('is-active', matches);
-              link.setAttribute('aria-current', matches ? 'true' : 'false');
-            });
-          }
-        });
-      },
-      {
-        rootMargin: `-${parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) + 20}px 0px -60% 0px`,
-        threshold: 0
-      }
-    );
-
-    this.sections.forEach(section => observer.observe(section));
-  }
-}
-
-
-/* ─────────────────────────────────
-   3. READING PROGRESS BAR
-───────────────────────────────── */
-class ReadingProgress {
-  constructor() {
-    this.bar = document.getElementById('readingProgress');
-    if (!this.bar) return;
-    window.addEventListener('scroll', this._update.bind(this), { passive: true });
-  }
-
-  _update() {
-    const scrollTop    = window.scrollY;
-    const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
-    const progress     = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    this.bar.style.width = `${Math.min(progress, 100)}%`;
-    this.bar.setAttribute('aria-valuenow', Math.round(progress));
-  }
-}
-
-
-/* ─────────────────────────────────
-   4. SCROLL REVEAL
-───────────────────────────────── */
-class ScrollReveal {
-  constructor() {
-    this.elements = document.querySelectorAll('.reveal');
-    if (!this.elements.length) return;
-    this._initObserver();
-  }
-
-  _initObserver() {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            // Stagger siblings slightly
-            const siblings = [...entry.target.parentElement.querySelectorAll('.reveal:not(.is-visible)')];
-            const idx = siblings.indexOf(entry.target);
-            entry.target.style.transitionDelay = idx > 0 ? `${idx * 60}ms` : '0ms';
-
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    this.elements.forEach(el => observer.observe(el));
-  }
-}
-
-
-/* ─────────────────────────────────
-   5. SKILL BAR ANIMATION
-───────────────────────────────── */
-class SkillBars {
-  constructor() {
-    this.cards = document.querySelectorAll('.skill-card');
-    if (!this.cards.length) return;
-    this._initObserver();
-  }
-
-  _initObserver() {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    this.cards.forEach(card => observer.observe(card));
-  }
-}
-
-
-/* ─────────────────────────────────
-   6. SMOOTH SCROLL
-───────────────────────────────── */
-class SmoothScroll {
-  constructor() {
-    this._initLinks();
-  }
-
-  _initLinks() {
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href   = link.getAttribute('href');
-        const target = document.querySelector(href);
-        if (!target) return;
-
-        e.preventDefault();
-
-        const navHeight = parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue('--nav-height')
-        ) || 68;
-
-        const targetY = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-
-        // Update URL hash without jumping
-        history.pushState(null, '', href);
-
-        // Move focus to section for accessibility
-        target.setAttribute('tabindex', '-1');
-        target.focus({ preventScroll: true });
-        target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    setTimeout(() => {
+      if (success) { success.hidden = false; }
+      if (submitBtn) { submitBtn.style.display = 'none'; }
+      form.reset();
+      // Reset field styles
+      [name, email, message].forEach(f => {
+        if (f) { f.style.borderColor = ''; f.style.boxShadow = ''; }
       });
+    }, 900);
+  });
+
+  // Clear error on typing
+  $$('input, textarea', form).forEach(field => {
+    field.addEventListener('input', () => {
+      field.style.borderColor = '';
+      field.style.boxShadow   = '';
     });
-  }
-}
+  });
+})();
 
+/* ───────────────────────────────────────────────────────────
+   16. MAGNETIC BUTTONS
+   Buttons subtly pull toward the cursor — luxury feel.
+─────────────────────────────────────────────────────────── */
+(function initMagnetic() {
+  if (!isFinePointer() || isMobile()) return;
 
-/* ─────────────────────────────────
-   7. CONTACT FORM
-───────────────────────────────── */
-class ContactForm {
-  constructor() {
-    this.form    = document.getElementById('contactForm');
-    this.success = document.getElementById('formSuccess');
-    if (!this.form || !this.success) return;
-    this._init();
-  }
+  $$('.magnetic').forEach(btn => {
+    const STRENGTH = 0.35;
 
-  _init() {
-    this.form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (!this.form.checkValidity()) {
-        this.form.reportValidity();
-        return;
-      }
-
-      const btn = this.form.querySelector('.contact-form__submit');
-      const originalText = btn.innerHTML;
-
-      // Loading state
-      btn.disabled = true;
-      btn.innerHTML = '<span>Sending...</span>';
-
-      // Simulate async (replace with real fetch to Formspree / EmailJS)
-      setTimeout(() => {
-        this.success.classList.add('is-visible');
-        this.form.reset();
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-
-        // Hide success after 6s
-        setTimeout(() => {
-          this.success.classList.remove('is-visible');
-        }, 6000);
-      }, 900);
+    btn.addEventListener('mousemove', e => {
+      const rect = btn.getBoundingClientRect();
+      const dx   = e.clientX - (rect.left + rect.width  / 2);
+      const dy   = e.clientY - (rect.top  + rect.height / 2);
+      btn.style.transform    = `translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
+      btn.style.transition   = 'transform 100ms linear';
     });
 
-    // Live validation feedback
-    this.form.querySelectorAll('.contact-form__input').forEach(input => {
-      input.addEventListener('blur', () => {
-        if (!input.validity.valid && input.value.length > 0) {
-          input.style.borderColor = '#ef4444';
-        } else {
-          input.style.borderColor = '';
-        }
-      });
-      input.addEventListener('focus', () => {
-        input.style.borderColor = '';
-      });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform  = 'translate(0,0)';
+      btn.style.transition = 'transform 400ms cubic-bezier(0.34,1.56,0.64,1)';
     });
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────
+   17. PARALLAX ORBS
+   Orbs move subtly opposite to mouse for depth illusion.
+─────────────────────────────────────────────────────────── */
+(function initParallaxOrbs() {
+  if (isMobile()) return;
+
+  const orbs = [
+    { el: $('.orb--1'), speed: 0.018 },
+    { el: $('.orb--2'), speed: 0.012 },
+    { el: $('.orb--3'), speed: 0.025 }
+  ];
+
+  let mx = 0, my = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX - window.innerWidth  / 2;
+    my = e.clientY - window.innerHeight / 2;
+  }, { passive: true });
+
+  function animateOrbs() {
+    orbs.forEach(({ el, speed }) => {
+      if (!el) return;
+      const tx = mx * speed;
+      const ty = my * speed;
+      el.style.transform = `translate(${tx}px, ${ty}px)`;
+    });
+    requestAnimationFrame(animateOrbs);
   }
-}
+  animateOrbs();
+})();
 
+/* ───────────────────────────────────────────────────────────
+   INJECT CSS ANIMATIONS not easily doable in stylesheet
+   (shake for form, page enter)
+─────────────────────────────────────────────────────────── */
+(function injectKeyframes() {
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)}
+      60%{transform:translateX(-5px)}
+      80%{transform:translateX(5px)}
+    }
+  `;
+  document.head.appendChild(style);
+})();
 
-/* ─────────────────────────────────
-   8. HERO ENTRANCE ANIMATION
-   Stagger hero elements on load
-───────────────────────────────── */
-class HeroEntrance {
-  constructor() {
-    // Elements already animated via CSS animation-delay
-    // This just ensures they're visible even if CSS animation fails
-    document.querySelectorAll('.hero__eyebrow, .hero__name, .hero__tagline, .hero__actions, .hero__meta, .hero__focus')
-      .forEach((el, i) => {
-        el.style.animationDelay = `${i * 0.1}s`;
-      });
+/* ───────────────────────────────────────────────────────────
+   PERFORMANCE: Disable heavy effects on low-end devices
+   Uses navigator.hardwareConcurrency as a simple heuristic.
+─────────────────────────────────────────────────────────── */
+(function performanceGuard() {
+  const cores = navigator.hardwareConcurrency || 4;
+  if (cores <= 2) {
+    // Kill Three.js canvas on very low-end devices
+    const canvas = $('#heroCanvas');
+    if (canvas) canvas.style.display = 'none';
+    // Disable orb animations
+    $$('.orb').forEach(o => o.style.animation = 'none');
   }
-}
+})();
 
-
-/* ─────────────────────────────────
-   INIT — Boot all modules when DOM is ready
-───────────────────────────────── */
-function init() {
-  new CustomCursor();
-  new NavigationManager();
-  new ReadingProgress();
-  new ScrollReveal();
-  new SkillBars();
-  new SmoothScroll();
-  new ContactForm();
-  new HeroEntrance();
-
-  // Log init in dev
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    console.log('%c✦ Portfolio v2 initialised', 'color: #00c896; font-weight: bold; font-size: 14px;');
-  }
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+/* ───────────────────────────────────────────────────────────
+   INIT SUMMARY  (console signature)
+─────────────────────────────────────────────────────────── */
+console.log(
+  '%c✦ Faiyaz Portfolio v4 %c 3D + GSAP + Premium \n%c Built with Three.js · GSAP · Vanilla JS',
+  'background:#00e5a8;color:#000;font-weight:700;padding:4px 8px;border-radius:3px 0 0 3px;font-family:monospace',
+  'background:#4d9fff;color:#fff;font-weight:700;padding:4px 8px;border-radius:0 3px 3px 0;font-family:monospace',
+  'color:#8e8a84;font-family:monospace;font-size:11px'
+);

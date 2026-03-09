@@ -1,994 +1,747 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" data-theme="dark">
 <head>
-  <!-- ============================================================
-       MD FAIYAZ ANSARI — PORTFOLIO v2
-       Principal Engineer Build · FAANG-Level Standards
-       Architecture: BEM + Design Tokens · WCAG 2.1 AA
-  ============================================================ -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-
-  <!-- SEO -->
-  <title>Md Faiyaz Ansari — Software Engineer · Java · Spring Boot · Full-Stack</title>
-  <meta name="description" content="Backend-focused Software Engineer. I build scalable systems with Java, Spring Boot and REST APIs. Currently building a Virtual Laboratory Platform. Open to SDE full-time and collaborative roles."/>
-  <meta name="keywords" content="Faiyaz Ansari, Software Engineer, Java, Spring Boot, Backend Developer, Full Stack, REST API, Greater Noida, KCC"/>
-  <meta name="author" content="Md Faiyaz Ansari"/>
-  <meta name="robots" content="index, follow"/>
-  <link rel="canonical" href="https://faiyazansari.dev"/>
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://faiyazansari.dev"/>
-  <meta property="og:title" content="Md Faiyaz Ansari — Software Engineer"/>
-  <meta property="og:description" content="Backend engineer specializing in Java, Spring Boot, and REST APIs. Building production-grade systems. Open to SDE roles."/>
-  <meta property="og:image" content="https://faiyazansari.dev/og-image.png"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-
-  <!-- Preconnect for fonts -->
+  <title>Md Faiyaz Ansari — Software Engineer</title>
+  <meta name="description" content="Backend-focused Software Engineer. Java, Spring Boot, REST APIs. Open to SDE full-time roles."/>
+  <!-- Fonts: Syne (display) + DM Sans (body) + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=IBM+Plex+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><text y='24' x='4' font-size='20' fill='%2300c896' font-family='serif' font-weight='bold'>F</text></svg>"/>
-
-  <!-- Devicons — official tech brand icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <!-- Devicons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+  <!-- ★ Three.js for 3D hero particles — async so it never blocks render -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" async></script>
+  <!-- ★ GSAP + ScrollTrigger for scroll-driven animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- Custom cursor -->
-  <div class="cursor" id="cursor" aria-hidden="true">
-    <div class="cursor__dot"></div>
-    <div class="cursor__ring"></div>
-  </div>
 
-  <!-- Skip to content (a11y) -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- ═══════════════════════════════════════
-       HEADER / NAV
-  ═══════════════════════════════════════ -->
-  <header class="header" id="header" role="banner">
-    <nav class="nav" aria-label="Primary navigation">
-      <div class="nav__brand">
-        <a href="#hero" class="nav__logo" aria-label="Faiyaz Ansari — Home">
-          <span class="nav__logo-mark">FA</span>
-          <span class="nav__logo-dot" aria-hidden="true"></span>
-        </a>
-        <div class="nav__status" role="status" aria-label="Availability status">
-          <span class="nav__status-dot" aria-hidden="true"></span>
-          <span class="nav__status-text">Open to SDE Full-Time Roles</span>
-        </div>
-      </div>
+<!-- Custom cursor -->
+<div id="fa-cursor" aria-hidden="true">
+  <div class="fac__outer"></div>
+  <div class="fac__inner"></div>
+  <span class="fac__text" id="faCursorText"></span>
+</div>
 
-      <ul class="nav__links" role="list">
-        <li><a href="#about"      class="nav__link" data-section="about">About</a></li>
-        <li><a href="#skills"     class="nav__link" data-section="skills">Stack</a></li>
-        <li><a href="#experience" class="nav__link" data-section="experience">Work</a></li>
-        <li><a href="#projects"   class="nav__link" data-section="projects">Projects</a></li>
-        <li><a href="#contact"    class="nav__link" data-section="contact">Contact</a></li>
-      </ul>
+<!-- ★ NEW: Back to top button -->
+<button class="back-top" id="backTop" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
 
-      <div class="nav__actions">
-        <a href="resume.pdf" download="MdFaiyazAnsari_Resume.pdf" class="btn btn--sm btn--ghost" aria-label="Download Faiyaz's resume">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Resume
-        </a>
-        <a href="/cdn-cgi/l/email-protection#81ece5e7e0e8f8e0fbe0b0b2b1c1e6ece0e8edafe2eeec" class="btn btn--sm btn--outline" aria-label="Hire Faiyaz">
-          Hire Me
-        </a>
-        <button class="nav__hamburger" id="navHamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNav">
-          <span class="nav__hamburger-line"></span>
-          <span class="nav__hamburger-line"></span>
-        </button>
-      </div>
+<!-- Film-grain noise overlay -->
+<div class="noise" aria-hidden="true"></div>
+
+<!-- ═══════════ NAV (ENHANCED) ═══════════ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#hero" class="nav__brand" data-cursor="Home">
+      <span class="nav__brand-mark">FA</span>
+      <span class="nav__brand-dot"></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#about"    data-cursor="About Me">About</a>
+      <a href="#skills"   data-cursor="My Stack">Stack</a>
+      <a href="#work"     data-cursor="Experience">Work</a>
+      <a href="#projects" data-cursor="Projects">Projects</a>
+      <a href="#contact"  data-cursor="Say Hello">Contact</a>
     </nav>
 
-    <!-- Mobile nav drawer -->
-    <div class="nav__mobile" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation" hidden>
-      <ul role="list">
-        <li><a href="#about"      class="nav__mobile-link">About</a></li>
-        <li><a href="#skills"     class="nav__mobile-link">Stack</a></li>
-        <li><a href="#experience" class="nav__mobile-link">Work</a></li>
-        <li><a href="#projects"   class="nav__mobile-link">Projects</a></li>
-        <li><a href="#contact"    class="nav__mobile-link">Contact</a></li>
-        <li><a href="/cdn-cgi/l/email-protection#cea3aaa8afa7b7afb4affffdfe8ea9a3afa7a2e0ada1a3" class="btn btn--primary nav__mobile-cta">Get In Touch</a></li>
-      </ul>
+    <div class="nav__right">
+      <!-- ★ NEW: Theme toggle -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="theme-toggle__moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-toggle__sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <a href="resume.pdf" download class="btn btn--sm" data-cursor="Download">↓ Resume</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
     </div>
+  </div>
 
-    <!-- Progress bar -->
-    <div class="header__progress" id="readingProgress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-  </header>
+  <!-- Mobile drawer -->
+  <div class="nav__drawer" id="navDrawer" hidden>
+    <a href="#about"    class="nav__drawer-link">About</a>
+    <a href="#skills"   class="nav__drawer-link">Stack</a>
+    <a href="#work"     class="nav__drawer-link">Work</a>
+    <a href="#projects" class="nav__drawer-link">Projects</a>
+    <a href="#contact"  class="nav__drawer-link">Contact</a>
+    <a href="resume.pdf" download class="btn btn--primary nav__drawer-cta">Download Resume</a>
+  </div>
 
-  <!-- ═══════════════════════════════════════
-       MAIN
-  ═══════════════════════════════════════ -->
-  <main id="main-content">
+  <div class="nav__progress" id="navProgress"></div>
+</header>
 
-    <!-- ─── HERO ─────────────────────────── -->
-    <section id="hero" class="hero" aria-label="Introduction and overview">
-      <div class="hero__inner">
+<main>
 
-        <!-- Left column: identity -->
-        <div class="hero__identity">
+<!-- ═══════════ HERO (3D + PARTICLES) ═══════════ -->
+<section id="hero" class="hero">
+  <!-- ★ NEW: Three.js particle canvas -->
+  <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
 
-          <!-- ── Profile Picture ── -->
-          <div class="hero__profile">
-            <div class="hero__avatar" aria-label="Md Faiyaz Ansari profile picture">
-              <div class="hero__avatar-inner">
-                <!-- Swap this div for <img src="your-photo.jpg" alt="Md Faiyaz Ansari" class="hero__avatar-photo"> when you have a real photo -->
-                <div class="hero__avatar-initials" aria-hidden="true">
-                  <span>MF</span>
-                </div>
-              </div>
-              <span class="hero__avatar-badge" title="Available for opportunities" aria-label="Available for SDE roles">
-                <span class="hero__avatar-badge-dot"></span>
-              </span>
-            </div>
-          </div>
+  <!-- ★ NEW: Animated gradient orbs -->
+  <div class="orb orb--1" aria-hidden="true"></div>
+  <div class="orb orb--2" aria-hidden="true"></div>
+  <div class="orb orb--3" aria-hidden="true"></div>
 
-          <p class="hero__eyebrow" aria-label="Role description">
-            <span class="mono">01 /</span> Software Engineer
-          </p>
-          <h1 class="hero__name">
-            <span class="hero__name-first">Md Faiyaz</span>
-            <span class="hero__name-last">Ansari<span class="hero__name-period" aria-hidden="true">.</span></span>
-          </h1>
-          <p class="hero__tagline">
-            I architect backend systems that<br class="br-lg"/>
-            <em>scale, secure, and ship.</em>
-          </p>
-          <div class="hero__actions">
-            <a href="#projects" class="btn btn--primary btn--lg">
-              <span>View my work</span>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a href="/cdn-cgi/l/email-protection#38555c5e595141594259090b08785f55595154165b5755" class="btn btn--ghost btn--lg">
-              Let's talk
-            </a>
-            <a href="resume.pdf" download="MdFaiyazAnsari_Resume.pdf" class="btn btn--outline btn--lg hero__resume-btn" aria-label="Download resume">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Resume
-            </a>
-          </div>
-          <div class="hero__meta" aria-label="Location and education details">
-            <span class="hero__meta-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Greater Noida, India
-            </span>
-            <span class="hero__meta-sep" aria-hidden="true">·</span>
-            <span class="hero__meta-item">BTech CSE · 2027</span>
-            <span class="hero__meta-sep" aria-hidden="true">·</span>
-            <span class="hero__meta-item">GPA 7.87</span>
-          </div>
+  <!-- Subtle grid -->
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="hero__left">
+
+      <!-- ★ UPGRADED: Real photo with animated rings -->
+      <div class="hero__avatar" data-cursor="That's me!">
+        <div class="avatar__glow"></div>
+        <div class="avatar__rings">
+          <span class="aring aring--1"></span>
+          <span class="aring aring--2"></span>
+          <span class="aring aring--3"></span>
         </div>
-
-        <!-- Right column: current focus card -->
-        <div class="hero__focus">
-          <div class="focus-card" role="article" aria-label="Current project">
-            <div class="focus-card__header">
-              <span class="focus-card__label mono">Current Focus</span>
-              <span class="focus-card__live" aria-label="In progress">
-                <span class="focus-card__live-dot" aria-hidden="true"></span>
-                In Progress
-              </span>
-            </div>
-            <h2 class="focus-card__title">Virtual Laboratory Platform</h2>
-            <p class="focus-card__desc">
-              Production-style EdTech system with role-based access control for teachers and students. Architected for scale with Spring Boot microservices, JWT auth, and React frontend.
-            </p>
-            <div class="focus-card__stack" aria-label="Technologies">
-              <span class="tag">Spring Boot</span>
-              <span class="tag">Java</span>
-              <span class="tag">JWT</span>
-              <span class="tag">MySQL</span>
-              <span class="tag">React</span>
-            </div>
-            <div class="focus-card__footer">
-              <span class="mono focus-card__commit">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
-                last commit: 2 days ago
-              </span>
-              <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="focus-card__link" aria-label="View Virtual Laboratory Platform on GitHub">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                GitHub
-              </a>
-            </div>
-          </div>
-
-          <!-- Stats strip -->
-          <div class="hero__stats" role="list" aria-label="Key statistics">
-            <div class="hero__stat" role="listitem">
-              <span class="hero__stat-num">3+</span>
-              <span class="hero__stat-label">Years building</span>
-            </div>
-            <div class="hero__stat-divider" aria-hidden="true"></div>
-            <div class="hero__stat" role="listitem">
-              <span class="hero__stat-num">4+</span>
-              <span class="hero__stat-label">Projects shipped</span>
-            </div>
-            <div class="hero__stat-divider" aria-hidden="true"></div>
-            <div class="hero__stat" role="listitem">
-              <span class="hero__stat-num">10+</span>
-              <span class="hero__stat-label">Technologies</span>
-            </div>
-            <div class="hero__stat-divider" aria-hidden="true"></div>
-            <div class="hero__stat" role="listitem">
-              <span class="hero__stat-num">2</span>
-              <span class="hero__stat-label">Certifications</span>
-            </div>
-          </div>
+        <div class="avatar__frame">
+          <img src="photo.jpg" alt="Md Faiyaz Ansari" class="avatar__photo" loading="eager" style="object-position: center top;"/>
         </div>
+        <span class="avatar__online" title="Available for work"></span>
       </div>
 
-      <!-- Marquee ticker -->
-      <div class="marquee" aria-label="Technology stack" aria-hidden="true">
-        <div class="marquee__track">
-          <div class="marquee__content">
-            <span class="marquee__item"><i class="devicon-java-plain" aria-hidden="true"></i>Java</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-spring-plain" aria-hidden="true"></i>Spring Boot</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-react-original" aria-hidden="true"></i>React</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-javascript-plain" aria-hidden="true"></i>JavaScript</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-mysql-plain" aria-hidden="true"></i>MySQL</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-python-plain" aria-hidden="true"></i>Python</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-tailwindcss-plain" aria-hidden="true"></i>Tailwind</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-hibernate-plain" aria-hidden="true"></i>Hibernate</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-tensorflow-original" aria-hidden="true"></i>TensorFlow</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-html5-plain" aria-hidden="true"></i>HTML5</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-cplusplus-plain" aria-hidden="true"></i>C++</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-selenium-original" aria-hidden="true"></i>Selenium</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-maven-plain" aria-hidden="true"></i>Maven</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-netlify-plain" aria-hidden="true"></i>Netlify</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-scikitlearn-plain" aria-hidden="true"></i>Scikit-learn</span><span class="marquee__sep">✦</span>
-          </div>
-          <!-- Duplicate for seamless loop -->
-          <div class="marquee__content" aria-hidden="true">
-            <span class="marquee__item"><i class="devicon-java-plain" aria-hidden="true"></i>Java</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-spring-plain" aria-hidden="true"></i>Spring Boot</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-react-original" aria-hidden="true"></i>React</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-javascript-plain" aria-hidden="true"></i>JavaScript</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-mysql-plain" aria-hidden="true"></i>MySQL</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-python-plain" aria-hidden="true"></i>Python</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-tailwindcss-plain" aria-hidden="true"></i>Tailwind</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-hibernate-plain" aria-hidden="true"></i>Hibernate</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-tensorflow-original" aria-hidden="true"></i>TensorFlow</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-html5-plain" aria-hidden="true"></i>HTML5</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-cplusplus-plain" aria-hidden="true"></i>C++</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-selenium-original" aria-hidden="true"></i>Selenium</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-maven-plain" aria-hidden="true"></i>Maven</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-netlify-plain" aria-hidden="true"></i>Netlify</span><span class="marquee__sep">✦</span>
-            <span class="marquee__item"><i class="devicon-scikitlearn-plain" aria-hidden="true"></i>Scikit-learn</span><span class="marquee__sep">✦</span>
-          </div>
-        </div>
+      <div class="hero__pill mono">
+        <span class="hero__pill-dot"></span>
+        Open to SDE Full-Time
       </div>
-    </section>
 
-    <!-- ─── ABOUT ─────────────────────────── -->
-    <section id="about" class="section about" aria-label="About Faiyaz">
-      <div class="section__inner">
-        <div class="section__label" aria-hidden="true">
-          <span class="mono">02 /</span>
-        </div>
+      <!-- ★ NEW: Staggered text reveal animation -->
+      <h1 class="hero__name">
+        <span class="hero__name-word">Md</span>
+        <span class="hero__name-word">Faiyaz</span>
+        <span class="hero__name-word hero__name-word--accent">Ansari<span class="hero__period">.</span></span>
+      </h1>
 
-        <div class="about__grid">
-          <div class="about__heading">
-            <h2 class="section__title reveal">
-              Engineering with<br/>
-              <em>architectural instinct.</em>
-            </h2>
-          </div>
-
-          <div class="about__content reveal">
-            <p class="about__lead">
-              I'm a <strong>backend-focused software engineer</strong> at KCC Institute of Technology &amp; Management (BTech CSE, graduating 2027). My primary domain is JVM-land — Java, Spring Boot, REST APIs, and the system design decisions that make services maintainable at scale.
-            </p>
-            <p class="about__body">
-              I've shipped production code: RESTful APIs in a software development role, a full-stack ticket booking system I architected end-to-end, and currently a Virtual Laboratory Platform that handles role-based access for multi-tenant educational workflows. I approach problems with an emphasis on clean contracts, measurable performance, and code that future engineers can actually read.
-            </p>
-            <p class="about__body">
-              On the frontend I'm equally at home — React, Tailwind, and a design sensibility that closes the gap between mockup and production. I also explore the ML/data layer when problems call for it.
-            </p>
-
-            <div class="about__principles" role="list" aria-label="Engineering principles">
-              <div class="principle" role="listitem">
-                <span class="principle__num mono">01</span>
-                <div>
-                  <h3 class="principle__title">System Thinking</h3>
-                  <p class="principle__text">Design for failure modes first. Contracts before implementation.</p>
-                </div>
-              </div>
-              <div class="principle" role="listitem">
-                <span class="principle__num mono">02</span>
-                <div>
-                  <h3 class="principle__title">Performance by Default</h3>
-                  <p class="principle__text">Multithreading, query optimization, and profiling aren't afterthoughts.</p>
-                </div>
-              </div>
-              <div class="principle" role="listitem">
-                <span class="principle__num mono">03</span>
-                <div>
-                  <h3 class="principle__title">Ship, Iterate, Improve</h3>
-                  <p class="principle__text">Versioned APIs and CI/CD practices mean never fearing deployment.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── SKILLS / STACK ─────────────────── -->
-    <section id="skills" class="section skills" aria-label="Technical skills and stack">
-      <div class="section__inner">
-        <div class="section__label" aria-hidden="true">
-          <span class="mono">03 /</span>
-        </div>
-
-        <header class="section__header reveal">
-          <h2 class="section__title">The stack I build with.</h2>
-          <p class="section__subtitle">Production-tested technologies across the full application lifecycle.</p>
-        </header>
-
-        <div class="skills__grid" role="list">
-
-          <article class="skill-card skill-card--featured reveal" role="listitem" aria-label="Backend technologies">
-            <div class="skill-card__header">
-              <div class="skill-card__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-              </div>
-              <span class="skill-card__category mono">Backend</span>
-            </div>
-            <ul class="skill-card__list" role="list">
-              <li class="skill-card__item">
-                <span class="skill-card__name"><i class="devicon-java-plain skill-icon" aria-hidden="true"></i>Java</span>
-                <span class="skill-card__bar" aria-hidden="true"><span style="width:90%"></span></span>
-              </li>
-              <li class="skill-card__item">
-                <span class="skill-card__name"><i class="devicon-spring-plain skill-icon" aria-hidden="true"></i>Spring Boot</span>
-                <span class="skill-card__bar" aria-hidden="true"><span style="width:85%"></span></span>
-              </li>
-              <li class="skill-card__item">
-                <span class="skill-card__name"><i class="devicon-fastapi-plain skill-icon" aria-hidden="true"></i>REST APIs</span>
-                <span class="skill-card__bar" aria-hidden="true"><span style="width:88%"></span></span>
-              </li>
-              <li class="skill-card__item">
-                <span class="skill-card__name"><i class="devicon-jira-plain skill-icon" aria-hidden="true"></i>JWT / Security</span>
-                <span class="skill-card__bar" aria-hidden="true"><span style="width:80%"></span></span>
-              </li>
-              <li class="skill-card__item">
-                <span class="skill-card__name"><i class="devicon-hibernate-plain skill-icon" aria-hidden="true"></i>JPA / Hibernate</span>
-                <span class="skill-card__bar" aria-hidden="true"><span style="width:78%"></span></span>
-              </li>
-            </ul>
-          </article>
-
-          <article class="skill-card reveal" role="listitem" aria-label="Frontend technologies">
-            <div class="skill-card__header">
-              <div class="skill-card__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              </div>
-              <span class="skill-card__category mono">Frontend</span>
-            </div>
-            <ul class="skill-card__list" role="list">
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-react-original skill-icon" aria-hidden="true"></i>React</span><span class="skill-card__bar" aria-hidden="true"><span style="width:80%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-javascript-plain skill-icon" aria-hidden="true"></i>JavaScript (ES6+)</span><span class="skill-card__bar" aria-hidden="true"><span style="width:82%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-tailwindcss-plain skill-icon" aria-hidden="true"></i>Tailwind CSS</span><span class="skill-card__bar" aria-hidden="true"><span style="width:85%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-html5-plain skill-icon" aria-hidden="true"></i>HTML5 / CSS3</span><span class="skill-card__bar" aria-hidden="true"><span style="width:90%"></span></span></li>
-            </ul>
-          </article>
-
-          <article class="skill-card reveal" role="listitem" aria-label="Data and infrastructure">
-            <div class="skill-card__header">
-              <div class="skill-card__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-              </div>
-              <span class="skill-card__category mono">Data / Infra</span>
-            </div>
-            <ul class="skill-card__list" role="list">
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-mysql-plain skill-icon" aria-hidden="true"></i>MySQL</span><span class="skill-card__bar" aria-hidden="true"><span style="width:82%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-github-original skill-icon" aria-hidden="true"></i>Git / GitHub</span><span class="skill-card__bar" aria-hidden="true"><span style="width:88%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-maven-plain skill-icon" aria-hidden="true"></i>Maven</span><span class="skill-card__bar" aria-hidden="true"><span style="width:75%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-netlify-plain skill-icon" aria-hidden="true"></i>Netlify / Vercel</span><span class="skill-card__bar" aria-hidden="true"><span style="width:78%"></span></span></li>
-            </ul>
-          </article>
-
-          <article class="skill-card reveal" role="listitem" aria-label="Systems programming">
-            <div class="skill-card__header">
-              <div class="skill-card__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              </div>
-              <span class="skill-card__category mono">Systems</span>
-            </div>
-            <ul class="skill-card__list" role="list">
-              <li class="skill-card__item"><span class="skill-card__name">Multithreading</span><span class="skill-card__bar" aria-hidden="true"><span style="width:76%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name">Socket Programming</span><span class="skill-card__bar" aria-hidden="true"><span style="width:72%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name">DSA / Algorithms</span><span class="skill-card__bar" aria-hidden="true"><span style="width:82%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name">OOP Design</span><span class="skill-card__bar" aria-hidden="true"><span style="width:85%"></span></span></li>
-            </ul>
-          </article>
-
-          <article class="skill-card reveal" role="listitem" aria-label="Testing and machine learning">
-            <div class="skill-card__header">
-              <div class="skill-card__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
-              </div>
-              <span class="skill-card__category mono">Testing / ML</span>
-            </div>
-            <ul class="skill-card__list" role="list">
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-junit-plain skill-icon" aria-hidden="true"></i>JUnit / Mockito</span><span class="skill-card__bar" aria-hidden="true"><span style="width:74%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-selenium-original skill-icon" aria-hidden="true"></i>Selenium</span><span class="skill-card__bar" aria-hidden="true"><span style="width:65%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-scikitlearn-plain skill-icon" aria-hidden="true"></i>Scikit-learn</span><span class="skill-card__bar" aria-hidden="true"><span style="width:68%"></span></span></li>
-              <li class="skill-card__item"><span class="skill-card__name"><i class="devicon-tensorflow-original skill-icon" aria-hidden="true"></i>TensorFlow</span><span class="skill-card__bar" aria-hidden="true"><span style="width:60%"></span></span></li>
-            </ul>
-          </article>
-
-          <article class="skill-card reveal" role="listitem" aria-label="Languages">
-            <div class="skill-card__header">
-              <div class="skill-card__icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-              </div>
-              <span class="skill-card__category mono">Languages</span>
-            </div>
-            <div class="skill-card__lang-grid" role="list" aria-label="Programming languages">
-              <span class="lang-badge" role="listitem"><i class="devicon-java-plain" aria-hidden="true"></i>Java</span>
-              <span class="lang-badge" role="listitem"><i class="devicon-python-plain" aria-hidden="true"></i>Python</span>
-              <span class="lang-badge" role="listitem"><i class="devicon-cplusplus-plain" aria-hidden="true"></i>C++</span>
-              <span class="lang-badge" role="listitem"><i class="devicon-c-plain" aria-hidden="true"></i>C</span>
-              <span class="lang-badge" role="listitem"><i class="devicon-javascript-plain" aria-hidden="true"></i>JavaScript</span>
-              <span class="lang-badge" role="listitem"><i class="devicon-azuresqldatabase-plain" aria-hidden="true"></i>SQL</span>
-            </div>
-          </article>
-
-        </div>
-
-        <!-- ── Full Tech Icon Wall ── -->
-        <div class="tech-wall reveal" aria-label="All technologies and tools">
-          <p class="tech-wall__label mono">All technologies &amp; tools</p>
-          <div class="tech-wall__grid" role="list">
-
-            <!-- Languages -->
-            <div class="tech-pill" role="listitem" title="Java">
-              <i class="devicon-java-plain colored" aria-hidden="true"></i>
-              <span>Java</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Python">
-              <i class="devicon-python-plain colored" aria-hidden="true"></i>
-              <span>Python</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="C++">
-              <i class="devicon-cplusplus-plain colored" aria-hidden="true"></i>
-              <span>C++</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="C">
-              <i class="devicon-c-plain colored" aria-hidden="true"></i>
-              <span>C</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="JavaScript">
-              <i class="devicon-javascript-plain colored" aria-hidden="true"></i>
-              <span>JavaScript</span>
-            </div>
-
-            <!-- Backend -->
-            <div class="tech-pill" role="listitem" title="Spring Boot">
-              <i class="devicon-spring-plain colored" aria-hidden="true"></i>
-              <span>Spring Boot</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Hibernate / JPA">
-              <i class="devicon-hibernate-plain colored" aria-hidden="true"></i>
-              <span>Hibernate</span>
-            </div>
-
-            <!-- Frontend -->
-            <div class="tech-pill" role="listitem" title="React">
-              <i class="devicon-react-original colored" aria-hidden="true"></i>
-              <span>React</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="HTML5">
-              <i class="devicon-html5-plain colored" aria-hidden="true"></i>
-              <span>HTML5</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="CSS3">
-              <i class="devicon-css3-plain colored" aria-hidden="true"></i>
-              <span>CSS3</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Tailwind CSS">
-              <i class="devicon-tailwindcss-plain colored" aria-hidden="true"></i>
-              <span>Tailwind</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Bootstrap">
-              <i class="devicon-bootstrap-plain colored" aria-hidden="true"></i>
-              <span>Bootstrap</span>
-            </div>
-
-            <!-- Database -->
-            <div class="tech-pill" role="listitem" title="MySQL">
-              <i class="devicon-mysql-plain colored" aria-hidden="true"></i>
-              <span>MySQL</span>
-            </div>
-
-            <!-- Tools -->
-            <div class="tech-pill" role="listitem" title="Git">
-              <i class="devicon-git-plain colored" aria-hidden="true"></i>
-              <span>Git</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="GitHub">
-              <i class="devicon-github-original" aria-hidden="true"></i>
-              <span>GitHub</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Maven">
-              <i class="devicon-maven-plain colored" aria-hidden="true"></i>
-              <span>Maven</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="IntelliJ IDEA">
-              <i class="devicon-intellij-plain colored" aria-hidden="true"></i>
-              <span>IntelliJ</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="VS Code">
-              <i class="devicon-vscode-plain colored" aria-hidden="true"></i>
-              <span>VS Code</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Netlify">
-              <i class="devicon-netlify-plain colored" aria-hidden="true"></i>
-              <span>Netlify</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Vercel">
-              <i class="devicon-vercel-plain" aria-hidden="true"></i>
-              <span>Vercel</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Linux">
-              <i class="devicon-linux-plain" aria-hidden="true"></i>
-              <span>Linux</span>
-            </div>
-
-            <!-- Testing / ML -->
-            <div class="tech-pill" role="listitem" title="Selenium">
-              <i class="devicon-selenium-original colored" aria-hidden="true"></i>
-              <span>Selenium</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="TensorFlow">
-              <i class="devicon-tensorflow-original colored" aria-hidden="true"></i>
-              <span>TensorFlow</span>
-            </div>
-            <div class="tech-pill" role="listitem" title="Scikit-learn">
-              <i class="devicon-scikitlearn-plain colored" aria-hidden="true"></i>
-              <span>Scikit-learn</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ─── EXPERIENCE ─────────────────────── -->
-    <section id="experience" class="section experience" aria-label="Work experience">
-      <div class="section__inner">
-        <div class="section__label" aria-hidden="true">
-          <span class="mono">04 /</span>
-        </div>
-
-        <header class="section__header reveal">
-          <h2 class="section__title">Where I've built.</h2>
-          <p class="section__subtitle">Production experience across backend engineering, architecture, and technical training.</p>
-        </header>
-
-        <div class="timeline">
-          <article class="timeline__item reveal" aria-label="Capstone Project Lead">
-            <div class="timeline__line" aria-hidden="true"></div>
-            <div class="timeline__meta">
-              <time class="timeline__date mono" datetime="2023-01">Jan 2023</time>
-              <span class="timeline__meta-sep" aria-hidden="true">→</span>
-              <time class="timeline__date mono" datetime="2023-04">Apr 2023</time>
-              <span class="timeline__badge timeline__badge--project">Project Lead</span>
-            </div>
-            <div class="timeline__body">
-              <div class="timeline__org-row">
-                <h3 class="timeline__role">Capstone Project Lead</h3>
-                <span class="timeline__company">KCC Institute · Remote</span>
-              </div>
-              <ul class="timeline__achievements" role="list">
-                <li>
-                  <span class="timeline__ach-marker" aria-hidden="true">→</span>
-                  <span>Architected a complete online ticket booking system using Java — orchestrated all phases from system design to deployment</span>
-                </li>
-                <li>
-                  <span class="timeline__ach-marker" aria-hidden="true">→</span>
-                  <span>Designed socket-based communication layer and facilitated multithreading for concurrent user sessions</span>
-                </li>
-                <li>
-                  <span class="timeline__ach-marker" aria-hidden="true">→</span>
-                  <span>Applied systematic Git version control and documentation standards — maintained throughout lifecycle</span>
-                </li>
-              </ul>
-              <div class="timeline__tags" aria-label="Technologies used">
-                <span class="tag">Java</span>
-                <span class="tag">Socket Programming</span>
-                <span class="tag">Multithreading</span>
-                <span class="tag">OOP</span>
-                <span class="tag">Git</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="timeline__item reveal" aria-label="Technical Training at KCC">
-            <div class="timeline__line" aria-hidden="true"></div>
-            <div class="timeline__meta">
-              <time class="timeline__date mono" datetime="2023-09">Sep 2023</time>
-              <span class="timeline__meta-sep" aria-hidden="true">→</span>
-              <span class="timeline__date mono">Present</span>
-              <span class="timeline__badge timeline__badge--active">Active</span>
-            </div>
-            <div class="timeline__body">
-              <div class="timeline__org-row">
-                <h3 class="timeline__role">Technical Trainee — DSA &amp; Full Stack</h3>
-                <span class="timeline__company">KCC Institute · Greater Noida</span>
-              </div>
-              <ul class="timeline__achievements" role="list">
-                <li>
-                  <span class="timeline__ach-marker" aria-hidden="true">→</span>
-                  <span>Intensive program covering data structures, full-stack development, and production-standard application delivery</span>
-                </li>
-                <li>
-                  <span class="timeline__ach-marker" aria-hidden="true">→</span>
-                  <span>Consistent LeetCode problem-solving practice sharpening algorithmic reasoning for technical interviews</span>
-                </li>
-                <li>
-                  <span class="timeline__ach-marker" aria-hidden="true">→</span>
-                  <span>Deployed employment-standard frontend applications on Netlify and Vercel with CI/CD workflows</span>
-                </li>
-              </ul>
-              <div class="timeline__tags" aria-label="Technologies used">
-                <span class="tag">DSA</span>
-                <span class="tag">React</span>
-                <span class="tag">Tailwind</span>
-                <span class="tag">Netlify</span>
-                <span class="tag">LeetCode</span>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── PROJECTS ──────────────────────── -->
-    <section id="projects" class="section projects" aria-label="Selected projects">
-      <div class="section__inner">
-        <div class="section__label" aria-hidden="true">
-          <span class="mono">05 /</span>
-        </div>
-
-        <header class="section__header reveal">
-          <h2 class="section__title">Selected work.</h2>
-          <p class="section__subtitle">Projects I've designed, architected, and shipped.</p>
-        </header>
-
-        <div class="projects__grid">
-
-          <!-- Featured -->
-          <article class="project project--featured reveal" aria-label="Virtual Laboratory Platform">
-            <div class="project__num mono" aria-hidden="true">01</div>
-            <div class="project__content">
-              <div class="project__header">
-                <div>
-                  <span class="project__status project__status--active">In Progress</span>
-                  <h3 class="project__title">Virtual Laboratory Platform</h3>
-                </div>
-                <div class="project__links" aria-label="Project links">
-                  <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="project__icon-link" aria-label="View on GitHub" title="GitHub">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                  </a>
-                  <a href="#" class="project__icon-link" aria-label="View live demo" title="Live Demo">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  </a>
-                </div>
-              </div>
-              <p class="project__desc">Production-style EdTech platform enabling practical coding experiences in educational settings. Multi-tenant architecture with teacher/student role separation, assignment workflows, and real-time feedback. All architectural decisions follow established patterns for scalable, maintainable systems.</p>
-              <div class="project__tags" aria-label="Technologies">
-                <span class="tag">Spring Boot</span>
-                <span class="tag">Java</span>
-                <span class="tag">JWT Auth</span>
-                <span class="tag">MySQL</span>
-                <span class="tag">React</span>
-                <span class="tag">RBAC</span>
-                <span class="tag">REST API</span>
-              </div>
-              <div class="project__footer mono">
-                <span class="project__meta-item">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
-                  last commit: 2 days ago
-                </span>
-                <span class="project__meta-item">Java · Spring · Multi-tenant</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Grid projects -->
-          <article class="project reveal" aria-label="Online Train Ticket Booking">
-            <div class="project__num mono" aria-hidden="true">02</div>
-            <div class="project__content">
-              <div class="project__header">
-                <div>
-                  <span class="project__status project__status--done">Completed</span>
-                  <h3 class="project__title">Train Ticket Booking System</h3>
-                </div>
-                <div class="project__links" aria-label="Project links">
-                  <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="project__icon-link" aria-label="View on GitHub">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                  </a>
-                </div>
-              </div>
-              <p class="project__desc">Console-based Java application simulating train booking mechanics. Concurrent session handling via multithreading, socket-based client-server communication, and efficient in-memory data management.</p>
-              <div class="project__tags" aria-label="Technologies">
-                <span class="tag">Java</span>
-                <span class="tag">Sockets</span>
-                <span class="tag">Multithreading</span>
-                <span class="tag">OOP</span>
-              </div>
-              <div class="project__footer mono">
-                <span class="project__meta-item">Mar 2023 · Capstone</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="project reveal" aria-label="Fake News Detection ML">
-            <div class="project__num mono" aria-hidden="true">03</div>
-            <div class="project__content">
-              <div class="project__header">
-                <div>
-                  <span class="project__status project__status--done">Completed</span>
-                  <h3 class="project__title">Fake News Detection</h3>
-                </div>
-                <div class="project__links" aria-label="Project links">
-                  <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="project__icon-link" aria-label="View on GitHub">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                  </a>
-                </div>
-              </div>
-              <p class="project__desc">ML binary classifier distinguishing genuine from fabricated news articles. NLP preprocessing pipeline with TF-IDF feature extraction, trained and evaluated with Scikit-learn. Notable accuracy achieved in testing phase.</p>
-              <div class="project__tags" aria-label="Technologies">
-                <span class="tag">Python</span>
-                <span class="tag">Scikit-learn</span>
-                <span class="tag">NLP</span>
-                <span class="tag">TF-IDF</span>
-              </div>
-              <div class="project__footer mono">
-                <span class="project__meta-item">Feb 2023 · ML / NLP</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="project reveal" aria-label="Portfolio Website">
-            <div class="project__num mono" aria-hidden="true">04</div>
-            <div class="project__content">
-              <div class="project__header">
-                <div>
-                  <span class="project__status project__status--deployed">Deployed</span>
-                  <h3 class="project__title">Personal Portfolio</h3>
-                </div>
-                <div class="project__links" aria-label="Project links">
-                  <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="project__icon-link" aria-label="View on GitHub">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                  </a>
-                  <a href="#" class="project__icon-link" aria-label="View live">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  </a>
-                </div>
-              </div>
-              <p class="project__desc">Responsive, accessible developer portfolio built with semantic HTML, Tailwind CSS, and vanilla JS. Deployed on Netlify. Demonstrates UI engineering discipline — from typography systems to ARIA markup.</p>
-              <div class="project__tags" aria-label="Technologies">
-                <span class="tag">React</span>
-                <span class="tag">Tailwind CSS</span>
-                <span class="tag">JavaScript</span>
-                <span class="tag">Netlify</span>
-              </div>
-              <div class="project__footer mono">
-                <span class="project__meta-item">Apr 2023 · Frontend</span>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── EDUCATION ──────────────────────── -->
-    <section id="education" class="section education" aria-label="Education and credentials">
-      <div class="section__inner">
-        <div class="section__label" aria-hidden="true">
-          <span class="mono">06 /</span>
-        </div>
-
-        <header class="section__header reveal">
-          <h2 class="section__title">Education &amp; credentials.</h2>
-        </header>
-
-        <div class="education__grid">
-
-          <div class="edu-block reveal" role="article" aria-label="Bachelor's degree">
-            <div class="edu-block__aside">
-              <span class="edu-block__year mono">2022</span>
-              <span class="edu-block__line" aria-hidden="true"></span>
-              <span class="edu-block__year mono">2027</span>
-            </div>
-            <div class="edu-block__body">
-              <span class="edu-block__type">Degree</span>
-              <h3 class="edu-block__title">B.Tech — Computer Science &amp; Engineering</h3>
-              <p class="edu-block__school">KCC Institute of Technology &amp; Management, Greater Noida</p>
-              <p class="edu-block__detail">GPA 7.87 · Data Structures · Algorithms · DBMS · OOP · Computer Networks</p>
-              <span class="edu-block__badge">3rd Year · Expected 2027</span>
-            </div>
-          </div>
-
-          <div class="creds-grid reveal" role="list" aria-label="Certifications and awards">
-            <div class="cred-card" role="listitem">
-              <span class="cred-card__icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-              </span>
-              <div>
-                <p class="cred-card__name">Certified Java Developer</p>
-                <p class="cred-card__meta mono">2023</p>
-              </div>
-            </div>
-            <div class="cred-card" role="listitem">
-              <span class="cred-card__icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-              </span>
-              <div>
-                <p class="cred-card__name">Full Stack Web Development Certificate</p>
-                <p class="cred-card__meta mono">2023</p>
-              </div>
-            </div>
-            <div class="cred-card" role="listitem">
-              <span class="cred-card__icon cred-card__icon--award" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
-              </span>
-              <div>
-                <p class="cred-card__name">Top Coder — KCC Institute Hackathons</p>
-                <p class="cred-card__meta mono">Recognition</p>
-              </div>
-            </div>
-            <div class="cred-card" role="listitem">
-              <span class="cred-card__icon cred-card__icon--award" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </span>
-              <div>
-                <p class="cred-card__name">Collaborative Excellence Award — Faculty Recognition</p>
-                <p class="cred-card__meta mono">Recognition</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── CONTACT ───────────────────────── -->
-    <section id="contact" class="section contact" aria-label="Contact information">
-      <div class="section__inner">
-        <div class="section__label" aria-hidden="true">
-          <span class="mono">07 /</span>
-        </div>
-
-        <div class="contact__grid">
-          <div class="contact__left reveal">
-            <h2 class="section__title contact__heading">
-              Let's build<br/>
-              <em>something real.</em>
-            </h2>
-            <p class="contact__body">
-              I'm looking for full-time SDE opportunities where I can contribute to production systems, grow under strong engineers, and ship things that matter. If that sounds like your team — I'd like to hear from you.
-            </p>
-
-            <div class="contact__links" role="list">
-              <a href="/cdn-cgi/l/email-protection#b3ded7d5d2dacad2c9d2828083f3d4ded2dadf9dd0dcde" class="contact__link" role="listitem">
-                <span class="contact__link-label mono">Email</span>
-                <span class="contact__link-value"><span class="__cf_email__" data-cfemail="e28f8684838b9b839883d3d1d2a2858f838b8ecc818d8f">[email&#160;protected]</span></span>
-                <svg class="contact__link-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-              </a>
-              <a href="https://www.linkedin.com/in/md-faiyaz-ansari-6719212a4" target="_blank" rel="noopener noreferrer" class="contact__link" role="listitem">
-                <span class="contact__link-label mono">LinkedIn</span>
-                <span class="contact__link-value">md-faiyaz-ansari</span>
-                <svg class="contact__link-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-              </a>
-              <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="contact__link" role="listitem">
-                <span class="contact__link-label mono">GitHub</span>
-                <span class="contact__link-value">github.com/ansfaiz</span>
-                <svg class="contact__link-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <div class="contact__right reveal">
-            <form class="contact-form" id="contactForm" novalidate aria-label="Send a message to Faiyaz">
-              <div class="contact-form__row">
-                <div class="contact-form__group">
-                  <label class="contact-form__label" for="cf-name">Name <span aria-hidden="true">*</span></label>
-                  <input
-                    class="contact-form__input"
-                    type="text" id="cf-name" name="name"
-                    placeholder="Your full name"
-                    required autocomplete="name"
-                    aria-required="true"
-                  />
-                </div>
-                <div class="contact-form__group">
-                  <label class="contact-form__label" for="cf-email">Email <span aria-hidden="true">*</span></label>
-                  <input
-                    class="contact-form__input"
-                    type="email" id="cf-email" name="email"
-                    placeholder="you@company.com"
-                    required autocomplete="email"
-                    aria-required="true"
-                  />
-                </div>
-              </div>
-              <div class="contact-form__group">
-                <label class="contact-form__label" for="cf-org">Company / Organization</label>
-                <input
-                  class="contact-form__input"
-                  type="text" id="cf-org" name="organization"
-                  placeholder="Where are you reaching out from?"
-                  autocomplete="organization"
-                />
-              </div>
-              <div class="contact-form__group">
-                <label class="contact-form__label" for="cf-message">Message <span aria-hidden="true">*</span></label>
-                <textarea
-                  class="contact-form__input contact-form__textarea"
-                  id="cf-message" name="message" rows="5"
-                  placeholder="Tell me about the role, project, or opportunity..."
-                  required aria-required="true"
-                ></textarea>
-              </div>
-              <div class="contact-form__footer">
-                <button type="submit" class="btn btn--primary btn--lg contact-form__submit">
-                  <span class="contact-form__submit-text">Send message</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-              </div>
-              <div class="contact-form__success" id="formSuccess" role="alert" aria-live="polite" aria-atomic="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                Message sent. I'll respond within 24 hours.
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ═══════════════════════════════════════
-       FOOTER
-  ═══════════════════════════════════════ -->
-  <footer class="footer" role="contentinfo">
-    <div class="footer__inner">
-      <div class="footer__brand">
-        <span class="footer__logo">Md Faiyaz Ansari</span>
-        <span class="footer__role mono">Software Engineer · Backend · Full-Stack</span>
-      </div>
-      <p class="footer__copy">
-        <span class="mono">©</span> 2025 — Designed and built with intent.
+      <p class="hero__tagline">
+        I architect backend systems that<br/>
+        <!-- ★ NEW: Typewriter effect -->
+        <em class="hero__typewriter"><span id="typewriterText"></span><span class="tw-cursor">|</span></em>
       </p>
-      <div class="footer__socials" aria-label="Social links">
-        <a href="/cdn-cgi/l/email-protection#f4999092959d8d958e95c5c7c4b49399959d98da979b99" class="footer__social" aria-label="Email">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+
+      <div class="hero__meta mono">
+        <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Greater Noida</span>
+        <span class="sep">·</span>
+        <span>BTech CSE '27</span>
+        <span class="sep">·</span>
+        <span>Greater Noida</span>
+      </div>
+
+      <div class="hero__actions">
+        <!-- ★ NEW: Magnetic hover buttons -->
+        <a href="#projects" class="btn btn--primary btn--lg magnetic" data-cursor="Explore">
+          <span>View my work</span>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </a>
-        <a href="https://www.linkedin.com/in/md-faiyaz-ansari-6719212a4" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="LinkedIn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        <a href="#contact" class="btn btn--ghost btn--lg magnetic" data-cursor="Say hello">Let's talk</a>
+      </div>
+    </div>
+
+    <div class="hero__right">
+      <!-- ★ NEW: 3D tilt card with light reflection -->
+      <div class="focus-card tilt-card" id="focusCard" data-cursor="Current project">
+        <div class="card-shine"></div>
+        <div class="focus-card__top">
+          <span class="mono focus-card__label">Current Focus</span>
+          <span class="badge badge--live"><span class="badge__dot"></span>In Progress</span>
+        </div>
+        <h2 class="focus-card__title">Virtual Laboratory Platform</h2>
+        <p class="focus-card__desc">Production-style EdTech system with role-based access control for teachers &amp; students. Spring Boot microservices, JWT auth, React frontend.</p>
+        <div class="focus-card__tags">
+          <span class="tag">Spring Boot</span><span class="tag">Java</span>
+          <span class="tag">JWT</span><span class="tag">MySQL</span><span class="tag">React</span>
+        </div>
+        <div class="focus-card__footer">
+          <span class="mono focus-card__commit"><span class="commit-dot"></span>last commit: 2 days ago</span>
+          <a href="https://github.com/ansfaiz" target="_blank" rel="noopener" class="focus-card__gh">GitHub ↗</a>
+        </div>
+      </div>
+
+      <!-- ★ NEW: Animated counter stats -->
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <span class="hero__stat-num"><span class="counter" data-target="3">0</span>+</span>
+          <span class="hero__stat-label">Years building</span>
+        </div>
+        <div class="hero__stat-div"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num"><span class="counter" data-target="5">0</span>+</span>
+          <span class="hero__stat-label">Projects shipped</span>
+        </div>
+        <div class="hero__stat-div"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num"><span class="counter" data-target="10">0</span>+</span>
+          <span class="hero__stat-label">Technologies</span>
+        </div>
+        <div class="hero__stat-div"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num"><span class="counter" data-target="2">0</span></span>
+          <span class="hero__stat-label">Certifications</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee ticker -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <div class="marquee__inner">
+        <span><i class="devicon-java-plain"></i>Java</span><span class="dot">✦</span>
+        <span><i class="devicon-spring-plain"></i>Spring Boot</span><span class="dot">✦</span>
+        <span><i class="devicon-react-original"></i>React</span><span class="dot">✦</span>
+        <span><i class="devicon-javascript-plain"></i>JavaScript</span><span class="dot">✦</span>
+        <span><i class="devicon-mysql-plain"></i>MySQL</span><span class="dot">✦</span>
+        <span><i class="devicon-python-plain"></i>Python</span><span class="dot">✦</span>
+        <span><i class="devicon-tailwindcss-plain"></i>Tailwind</span><span class="dot">✦</span>
+        <span><i class="devicon-hibernate-plain"></i>Hibernate</span><span class="dot">✦</span>
+        <span><i class="devicon-cplusplus-plain"></i>C++</span><span class="dot">✦</span>
+        <span><i class="devicon-github-original"></i>GitHub</span><span class="dot">✦</span>
+      </div>
+      <div class="marquee__inner" aria-hidden="true">
+        <span><i class="devicon-java-plain"></i>Java</span><span class="dot">✦</span>
+        <span><i class="devicon-spring-plain"></i>Spring Boot</span><span class="dot">✦</span>
+        <span><i class="devicon-react-original"></i>React</span><span class="dot">✦</span>
+        <span><i class="devicon-javascript-plain"></i>JavaScript</span><span class="dot">✦</span>
+        <span><i class="devicon-mysql-plain"></i>MySQL</span><span class="dot">✦</span>
+        <span><i class="devicon-python-plain"></i>Python</span><span class="dot">✦</span>
+        <span><i class="devicon-tailwindcss-plain"></i>Tailwind</span><span class="dot">✦</span>
+        <span><i class="devicon-hibernate-plain"></i>Hibernate</span><span class="dot">✦</span>
+        <span><i class="devicon-cplusplus-plain"></i>C++</span><span class="dot">✦</span>
+        <span><i class="devicon-github-original"></i>GitHub</span><span class="dot">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ★ NEW: Animated scroll hint -->
+  <div class="scroll-hint" aria-hidden="true">
+    <span class="mono">scroll</span>
+    <div class="scroll-hint__line"><div class="scroll-hint__ball"></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about" class="section">
+  <div class="section__inner">
+    <div class="section__label mono">02 / About</div>
+
+    <!-- Top row: title left, intro text right -->
+    <div class="about__grid">
+      <div class="about__left reveal">
+        <h2 class="section__title">Engineering with<br/><em>architectural instinct.</em></h2>
+        <!-- Minimal stat pills under title — no conflict with code block -->
+        <div class="about__quick-stats">
+          <div class="about__qstat">
+            <span class="about__qstat-val">Java</span>
+            <span class="about__qstat-key mono">Primary</span>
+          </div>
+          <div class="about__qstat">
+            <span class="about__qstat-val">Spring</span>
+            <span class="about__qstat-key mono">Framework</span>
+          </div>
+          <div class="about__qstat">
+            <span class="about__qstat-val">'27</span>
+            <span class="about__qstat-key mono">Grad</span>
+          </div>
+          <div class="about__qstat">
+            <span class="about__qstat-val">SDE</span>
+            <span class="about__qstat-key mono">Open to</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about__right">
+        <p class="about__lead reveal">
+          I'm a <strong>backend-focused software engineer</strong> at KCC Institute of Technology &amp; Management (BTech CSE, graduating 2027). My domain is JVM-land — Java, Spring Boot, REST APIs, and the system design decisions that make services maintainable at scale.
+        </p>
+        <p class="about__body reveal">
+          I've shipped production code: RESTful APIs, a full-stack ticket booking system architected end-to-end, a PokéVerse explorer with battle system, and currently a Virtual Laboratory Platform with role-based access for multi-tenant educational workflows.
+        </p>
+        <p class="about__body reveal">
+          On the frontend I'm equally at home — React, Tailwind, and a design sensibility that closes the gap between mockup and production.
+        </p>
+
+        <div class="principles reveal">
+          <div class="principle">
+            <span class="mono principle__num">01</span>
+            <div><h3>System Thinking</h3><p>Design for failure modes first. Contracts before implementation.</p></div>
+          </div>
+          <div class="principle">
+            <span class="mono principle__num">02</span>
+            <div><h3>Performance by Default</h3><p>Multithreading, query optimization, and profiling aren't afterthoughts.</p></div>
+          </div>
+          <div class="principle">
+            <span class="mono principle__num">03</span>
+            <div><h3>Ship, Iterate, Improve</h3><p>Versioned APIs and CI/CD practices mean never fearing deployment.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code snippet lives BELOW the grid — full-width, no conflict -->
+    <div class="about__code-row reveal">
+      <div class="code-snippet">
+        <div class="code-snippet__bar">
+          <span></span><span></span><span></span>
+          <span class="code-snippet__filename mono">Faiyaz.java</span>
+        </div>
+        <pre class="mono"><span class="c-kw">public class</span> <span class="c-cls">Faiyaz</span> <span class="c-kw">extends</span> <span class="c-cls">SoftwareEngineer</span> {
+
+  <span class="c-kw">private final</span> String  role      = <span class="c-str">"Backend SDE"</span>;
+  <span class="c-kw">private final</span> String  college   = <span class="c-str">"KCC Institute, Greater Noida"</span>;
+  <span class="c-kw">private final</span> String[] stack    = { <span class="c-str">"Java"</span>, <span class="c-str">"Spring Boot"</span>, <span class="c-str">"MySQL"</span>, <span class="c-str">"React"</span> };
+  <span class="c-kw">private final</span> <span class="c-cls">boolean</span> available = <span class="c-bool">true</span>;   <span class="c-comment">// open to SDE offers</span>
+  <span class="c-kw">private final</span> <span class="c-cls">double</span>  gpa       = <span class="c-num">7.87</span>;
+
+  <span class="c-kw">public</span> String getGoal() {
+    <span class="c-kw">return</span> <span class="c-str">"Ship reliable systems. Grow under great engineers."</span>;
+  }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ SKILLS (GLASS CARDS) ═══════════ -->
+<section id="skills" class="section section--alt">
+  <div class="section__inner">
+    <div class="section__label mono">03 / Stack</div>
+    <div class="section__header reveal">
+      <h2 class="section__title">The stack I build with.</h2>
+      <p class="section__sub">Production-tested technologies across the full application lifecycle.</p>
+    </div>
+    <div class="skills__grid">
+
+      <div class="skill-card skill-card--dark reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="skill-card__head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><span class="mono">Backend</span></div>
+        <ul class="skill-list">
+          <li><span><i class="devicon-java-plain"></i>Java</span><div class="bar"><span style="--w:90%"></span></div></li>
+          <li><span><i class="devicon-spring-plain"></i>Spring Boot</span><div class="bar"><span style="--w:85%"></span></div></li>
+          <li><span>REST APIs</span><div class="bar"><span style="--w:88%"></span></div></li>
+          <li><span>JWT / Security</span><div class="bar"><span style="--w:80%"></span></div></li>
+          <li><span><i class="devicon-hibernate-plain"></i>JPA / Hibernate</span><div class="bar"><span style="--w:78%"></span></div></li>
+        </ul>
+      </div>
+
+      <div class="skill-card reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="skill-card__head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><span class="mono">Frontend</span></div>
+        <ul class="skill-list">
+          <li><span><i class="devicon-react-original"></i>React</span><div class="bar"><span style="--w:80%"></span></div></li>
+          <li><span><i class="devicon-javascript-plain"></i>JavaScript ES6+</span><div class="bar"><span style="--w:82%"></span></div></li>
+          <li><span><i class="devicon-tailwindcss-plain"></i>Tailwind CSS</span><div class="bar"><span style="--w:85%"></span></div></li>
+          <li><span><i class="devicon-html5-plain"></i>HTML5 / CSS3</span><div class="bar"><span style="--w:90%"></span></div></li>
+        </ul>
+      </div>
+
+      <div class="skill-card reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="skill-card__head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span class="mono">Data / Infra</span></div>
+        <ul class="skill-list">
+          <li><span><i class="devicon-mysql-plain"></i>MySQL</span><div class="bar"><span style="--w:82%"></span></div></li>
+          <li><span><i class="devicon-github-original"></i>Git / GitHub</span><div class="bar"><span style="--w:88%"></span></div></li>
+          <li><span><i class="devicon-maven-plain"></i>Maven</span><div class="bar"><span style="--w:75%"></span></div></li>
+          <li><span>Netlify / Vercel</span><div class="bar"><span style="--w:78%"></span></div></li>
+        </ul>
+      </div>
+
+      <div class="skill-card reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="skill-card__head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="mono">Systems</span></div>
+        <ul class="skill-list">
+          <li><span>Multithreading</span><div class="bar"><span style="--w:76%"></span></div></li>
+          <li><span>Socket Programming</span><div class="bar"><span style="--w:72%"></span></div></li>
+          <li><span>DSA / Algorithms</span><div class="bar"><span style="--w:82%"></span></div></li>
+          <li><span>OOP Design</span><div class="bar"><span style="--w:85%"></span></div></li>
+        </ul>
+      </div>
+
+      <div class="skill-card reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="skill-card__head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg><span class="mono">Testing / ML</span></div>
+        <ul class="skill-list">
+          <li><span>JUnit / Mockito</span><div class="bar"><span style="--w:74%"></span></div></li>
+          <li><span><i class="devicon-selenium-original"></i>Selenium</span><div class="bar"><span style="--w:65%"></span></div></li>
+          <li><span><i class="devicon-scikitlearn-plain"></i>Scikit-learn</span><div class="bar"><span style="--w:68%"></span></div></li>
+          <li><span><i class="devicon-tensorflow-original"></i>TensorFlow</span><div class="bar"><span style="--w:60%"></span></div></li>
+        </ul>
+      </div>
+
+      <div class="skill-card skill-card--langs reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="skill-card__head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg><span class="mono">Languages</span></div>
+        <div class="lang-badges">
+          <span class="lang-badge"><i class="devicon-java-plain colored"></i>Java</span>
+          <span class="lang-badge"><i class="devicon-python-plain colored"></i>Python</span>
+          <span class="lang-badge"><i class="devicon-cplusplus-plain colored"></i>C++</span>
+          <span class="lang-badge"><i class="devicon-c-plain colored"></i>C</span>
+          <span class="lang-badge"><i class="devicon-javascript-plain colored"></i>JavaScript</span>
+          <span class="lang-badge"><i class="devicon-azuresqldatabase-plain colored"></i>SQL</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tech-wall reveal">
+      <p class="mono tech-wall__label">All tools &amp; technologies</p>
+      <div class="tech-wall__grid">
+        <div class="tech-pill"><i class="devicon-java-plain colored"></i><span>Java</span></div>
+        <div class="tech-pill"><i class="devicon-python-plain colored"></i><span>Python</span></div>
+        <div class="tech-pill"><i class="devicon-cplusplus-plain colored"></i><span>C++</span></div>
+        <div class="tech-pill"><i class="devicon-spring-plain colored"></i><span>Spring Boot</span></div>
+        <div class="tech-pill"><i class="devicon-react-original colored"></i><span>React</span></div>
+        <div class="tech-pill"><i class="devicon-javascript-plain colored"></i><span>JavaScript</span></div>
+        <div class="tech-pill"><i class="devicon-html5-plain colored"></i><span>HTML5</span></div>
+        <div class="tech-pill"><i class="devicon-css3-plain colored"></i><span>CSS3</span></div>
+        <div class="tech-pill"><i class="devicon-tailwindcss-plain colored"></i><span>Tailwind</span></div>
+        <div class="tech-pill"><i class="devicon-mysql-plain colored"></i><span>MySQL</span></div>
+        <div class="tech-pill"><i class="devicon-git-plain colored"></i><span>Git</span></div>
+        <div class="tech-pill"><i class="devicon-github-original"></i><span>GitHub</span></div>
+        <div class="tech-pill"><i class="devicon-maven-plain colored"></i><span>Maven</span></div>
+        <div class="tech-pill"><i class="devicon-hibernate-plain colored"></i><span>Hibernate</span></div>
+        <div class="tech-pill"><i class="devicon-tensorflow-original colored"></i><span>TensorFlow</span></div>
+        <div class="tech-pill"><i class="devicon-selenium-original colored"></i><span>Selenium</span></div>
+        <div class="tech-pill"><i class="devicon-intellij-plain colored"></i><span>IntelliJ</span></div>
+        <div class="tech-pill"><i class="devicon-vscode-plain colored"></i><span>VS Code</span></div>
+        <div class="tech-pill"><i class="devicon-netlify-plain colored"></i><span>Netlify</span></div>
+        <div class="tech-pill"><i class="devicon-linux-plain"></i><span>Linux</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EXPERIENCE ═══════════ -->
+<section id="work" class="section">
+  <div class="section__inner">
+    <div class="section__label mono">04 / Work</div>
+    <div class="section__header reveal">
+      <h2 class="section__title">Where I've built.</h2>
+      <p class="section__sub">Production experience across backend engineering, architecture, and technical training.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline__item reveal">
+        <div class="timeline__meta">
+          <span class="mono timeline__date">Jan 2023 → Apr 2023</span>
+          <span class="badge badge--project">Project Lead</span>
+        </div>
+        <div class="timeline__body">
+          <div class="timeline__header">
+            <h3>Capstone Project Lead</h3>
+            <span class="mono timeline__org">KCC Institute · Remote</span>
+          </div>
+          <ul class="timeline__list">
+            <li>Architected a complete online ticket booking system using Java — orchestrated all phases from system design to deployment</li>
+            <li>Designed socket-based communication layer and facilitated multithreading for concurrent user sessions</li>
+            <li>Applied systematic Git version control and documentation standards maintained throughout lifecycle</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">Java</span><span class="tag">Socket Programming</span>
+            <span class="tag">Multithreading</span><span class="tag">OOP</span><span class="tag">Git</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline__item reveal">
+        <div class="timeline__meta">
+          <span class="mono timeline__date">Sep 2023 → Present</span>
+          <span class="badge badge--active">Active</span>
+        </div>
+        <div class="timeline__body">
+          <div class="timeline__header">
+            <h3>Technical Trainee — DSA &amp; Full Stack</h3>
+            <span class="mono timeline__org">KCC Institute · Greater Noida</span>
+          </div>
+          <ul class="timeline__list">
+            <li>Intensive program covering data structures, full-stack development, and production-standard application delivery</li>
+            <li>Consistent LeetCode problem-solving practice sharpening algorithmic reasoning for technical interviews</li>
+            <li>Deployed employment-standard frontend applications on Netlify and Vercel with CI/CD workflows</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag">DSA</span><span class="tag">React</span>
+            <span class="tag">Tailwind</span><span class="tag">Netlify</span><span class="tag">LeetCode</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROJECTS (3D TILT) ═══════════ -->
+<section id="projects" class="section section--alt">
+  <div class="section__inner">
+    <div class="section__label mono">05 / Projects</div>
+    <div class="section__header reveal">
+      <h2 class="section__title">Selected work.</h2>
+      <p class="section__sub">Projects I've designed, architected, and shipped.</p>
+    </div>
+    <div class="projects__grid">
+
+      <article class="project project--featured reveal tilt-card" data-cursor="Open Project">
+        <div class="card-shine"></div>
+        <div class="project__num mono">01</div>
+        <div class="project__body">
+          <div class="project__top">
+            <div><span class="badge badge--live">In Progress</span><h3 class="project__title">Virtual Laboratory Platform</h3></div>
+            <div class="project__links">
+              <a href="https://github.com/ansfaiz/virtualLaboratory" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="project__desc">Production-style EdTech platform enabling practical coding experiences in educational settings. Multi-tenant architecture with teacher/student role separation, assignment workflows, and real-time feedback.</p>
+          <div class="tag-row"><span class="tag">Spring Boot</span><span class="tag">Java</span><span class="tag">JWT Auth</span><span class="tag">MySQL</span><span class="tag">React</span><span class="tag">RBAC</span></div>
+          <div class="project__footer mono"><span>⬤ last commit: 2 days ago</span><span>Java · Spring · Multi-tenant</span></div>
+        </div>
+      </article>
+
+      <article class="project project--pokemon reveal tilt-card" data-cursor="Catch 'em all!">
+        <div class="card-shine"></div>
+        <div class="project__num mono">02</div>
+        <div class="project__body">
+          <div class="project__top">
+            <div><span class="badge badge--deployed">Deployed ↗</span><h3 class="project__title">PokéVerse</h3></div>
+            <div class="project__links">
+              <a href="https://github.com/ansfaiz/-Pok-Verse" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+              <a href="https://poke-versegame.netlify.app" target="_blank" rel="noopener" class="icon-btn" aria-label="Live demo">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="project__desc">Interactive Pokémon Explorer &amp; Battle Web App. Full Pokédex with 1025+ Pokémon, live search &amp; type filters, and a turn-based battle system with Gen 3 damage formula. Vanilla JS — no framework needed.</p>
+          <div class="tag-row"><span class="tag">Vanilla JS</span><span class="tag">PokéAPI</span><span class="tag">CSS3</span><span class="tag">Netlify</span><span class="tag">HTML5</span></div>
+          <div class="project__footer mono"><span>🚀 poke-versegame.netlify.app</span><span>JS · API · Battle Engine</span></div>
+        </div>
+      </article>
+
+      <article class="project reveal tilt-card" data-cursor="View Code">
+        <div class="card-shine"></div>
+        <div class="project__num mono">03</div>
+        <div class="project__body">
+          <div class="project__top">
+            <div><span class="badge badge--done">Completed</span><h3 class="project__title">Train Ticket Booking</h3></div>
+            <div class="project__links">
+              <a href="https://github.com/ansfaiz/Ticket_Booking_Project" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+              <a href="https://github.com/ansfaiz/socket-programming-java" target="_blank" rel="noopener" class="icon-btn" aria-label="Socket Programming Repo" title="Socket Programming">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="project__desc">Console-based Java application simulating train booking. Concurrent session handling via multithreading, socket-based client-server communication, and efficient in-memory data management.</p>
+          <div class="tag-row"><span class="tag">Java</span><span class="tag">Sockets</span><span class="tag">Multithreading</span><span class="tag">OOP</span></div>
+          <div class="project__footer mono"><span>Mar 2023 · Capstone</span></div>
+        </div>
+      </article>
+
+      <article class="project reveal tilt-card" data-cursor="View Code">
+        <div class="card-shine"></div>
+        <div class="project__num mono">04</div>
+        <div class="project__body">
+          <div class="project__top">
+            <div><span class="badge badge--done">Completed</span><h3 class="project__title">Fake News Detection</h3></div>
+            <div class="project__links">
+              <a href="https://github.com/ansfaiz/Fake_News_Detection" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="project__desc">ML binary classifier distinguishing genuine from fabricated news. NLP preprocessing pipeline with TF-IDF feature extraction, trained and evaluated with Scikit-learn.</p>
+          <div class="tag-row"><span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">NLP</span><span class="tag">TF-IDF</span></div>
+          <div class="project__footer mono"><span>Feb 2023 · ML / NLP</span></div>
+        </div>
+      </article>
+
+      <!-- AuthService — new project added -->
+      <article class="project reveal tilt-card" data-cursor="View Code">
+        <div class="card-shine"></div>
+        <div class="project__num mono">05</div>
+        <div class="project__body">
+          <div class="project__top">
+            <div><span class="badge badge--done">Completed</span><h3 class="project__title">Auth Service</h3></div>
+            <div class="project__links">
+              <a href="https://github.com/ansfaiz/AuthService" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="project__desc">Production-ready JWT authentication service built with Spring Boot. Implements secure login, token issuance, refresh flow, and role-based access control as a standalone microservice.</p>
+          <div class="tag-row"><span class="tag">Spring Boot</span><span class="tag">JWT</span><span class="tag">Java</span><span class="tag">Spring Security</span><span class="tag">MySQL</span></div>
+          <div class="project__footer mono"><span>2024 · Auth Microservice</span></div>
+        </div>
+      </article>
+
+      <article class="project reveal tilt-card" data-cursor="You're here!">
+        <div class="card-shine"></div>
+        <div class="project__num mono">06</div>
+        <div class="project__body">
+          <div class="project__top">
+            <div><span class="badge badge--deployed">Deployed</span><h3 class="project__title">Personal Portfolio</h3></div>
+            <div class="project__links">
+              <a href="https://github.com/ansfaiz/portfolio" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+              <a href="https://mdfaiyaz.netlify.app" target="_blank" rel="noopener" class="icon-btn" aria-label="Live demo">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <p class="project__desc">Premium 3D developer portfolio with Three.js particle field, GSAP scroll animations, glassmorphism cards, dark/light mode, custom cursor and full mobile responsiveness.</p>
+          <div class="tag-row"><span class="tag">Three.js</span><span class="tag">GSAP</span><span class="tag">CSS3</span><span class="tag">Netlify</span></div>
+          <div class="project__footer mono"><span>🚀 mdfaiyaz.netlify.app</span><span>2025 · You're looking at it</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EDUCATION ═══════════ -->
+<section id="education" class="section">
+  <div class="section__inner">
+    <div class="section__label mono">06 / Education</div>
+    <div class="section__header reveal"><h2 class="section__title">Education &amp; credentials.</h2></div>
+    <div class="edu__grid">
+      <div class="edu-card reveal tilt-card">
+        <div class="card-shine"></div>
+        <div class="edu-card__years">
+          <span class="mono">2022</span><div class="edu-card__line"></div><span class="mono">2027</span>
+        </div>
+        <div class="edu-card__body">
+          <span class="edu-card__type">Degree</span>
+          <h3>B.Tech — Computer Science &amp; Engineering</h3>
+          <p>KCC Institute of Technology &amp; Management, Greater Noida</p>
+          <p class="mono edu-card__detail">CGPA 7.87 · DSA · DBMS · OOP · Networks</p>
+          <span class="badge">3rd Year · Expected 2027</span>
+        </div>
+      </div>
+      <div class="creds reveal">
+        <div class="cred tilt-card"><div class="card-shine"></div><div class="cred__icon">🏆</div><div><p class="cred__name">Certified Java Developer</p><p class="mono cred__year">2023</p></div></div>
+        <div class="cred tilt-card"><div class="card-shine"></div><div class="cred__icon">🏆</div><div><p class="cred__name">Full Stack Web Development Certificate</p><p class="mono cred__year">2023</p></div></div>
+        <a href="https://leetcode.com/u/Ansfaiz1661/" target="_blank" rel="noopener" class="cred cred--link tilt-card"><div class="card-shine"></div><div class="cred__icon">⚡</div><div><p class="cred__name">LeetCode — Active Problem Solver</p><p class="mono cred__year">Ansfaiz1661 · Ongoing</p></div></a>
+        <a href="https://www.codechef.com/users/ansfaiz" target="_blank" rel="noopener" class="cred cred--link tilt-card"><div class="card-shine"></div><div class="cred__icon">👨‍💻</div><div><p class="cred__name">CodeChef</p><p class="mono cred__year">ansfaiz · Competitive</p></div></a>
+        <div class="cred tilt-card"><div class="card-shine"></div><div class="cred__icon">🚀</div><div><p class="cred__name">DSA &amp; Full Stack Technical Training</p><p class="mono cred__year">2023–Present</p></div></div>
+        <a href="https://www.instagram.com/Ansfaiz1661official" target="_blank" rel="noopener" class="cred cred--link tilt-card"><div class="card-shine"></div><div class="cred__icon">📸</div><div><p class="cred__name">Instagram</p><p class="mono cred__year">@Ansfaiz1661official</p></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="contact" class="section section--alt">
+  <div class="section__inner">
+    <div class="section__label mono">07 / Contact</div>
+    <div class="contact__grid">
+      <div class="contact__left reveal">
+        <h2 class="section__title">Let's build<br/><em>something real.</em></h2>
+        <p class="contact__body">I'm looking for full-time SDE opportunities where I can contribute to production systems, grow under strong engineers, and ship things that matter.</p>
+        <div class="contact__links">
+          <a href="/cdn-cgi/l/email-protection#34555a4752555d4d554e030c02745359555d581a575b59" class="contact__link">
+            <span class="mono contact__link-label">Email</span>
+            <span class="contact__link-val"><span class="__cf_email__" data-cfemail="31505f4257505848504b06090771565c50585d1f525e5c">[email&#160;protected]</span></span>
+            <span class="contact__link-arrow">↗</span>
+          </a>
+          <a href="https://www.linkedin.com/in/md-faiyaz-ansari-6719212a4" target="_blank" rel="noopener" class="contact__link">
+            <span class="mono contact__link-label">LinkedIn</span>
+            <span class="contact__link-val">md-faiyaz-ansari</span>
+            <span class="contact__link-arrow">↗</span>
+          </a>
+          <a href="https://github.com/ansfaiz" target="_blank" rel="noopener" class="contact__link">
+            <span class="mono contact__link-label">GitHub</span>
+            <span class="contact__link-val">github.com/ansfaiz</span>
+            <span class="contact__link-arrow">↗</span>
+          </a>
+          <a href="https://leetcode.com/u/Ansfaiz1661/" target="_blank" rel="noopener" class="contact__link">
+            <span class="mono contact__link-label">LeetCode</span>
+            <span class="contact__link-val">Ansfaiz1661</span>
+            <span class="contact__link-arrow">↗</span>
+          </a>
+          <a href="https://www.codechef.com/users/ansfaiz" target="_blank" rel="noopener" class="contact__link">
+            <span class="mono contact__link-label">CodeChef</span>
+            <span class="contact__link-val">ansfaiz</span>
+            <span class="contact__link-arrow">↗</span>
+          </a>
+          <a href="https://www.instagram.com/Ansfaiz1661official" target="_blank" rel="noopener" class="contact__link">
+            <span class="mono contact__link-label">Instagram</span>
+            <span class="contact__link-val">Ansfaiz1661official</span>
+            <span class="contact__link-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact__right reveal">
+        <form class="contact-form" id="contactForm" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="contact"/>
+          <p class="hidden" style="display:none"><label>Don't fill this out: <input name="bot-field"/></label></p>
+          <div class="form-row">
+            <div class="form-group"><label for="cf-name">Name *</label><input type="text" id="cf-name" name="name" placeholder="Your full name" required/></div>
+            <div class="form-group"><label for="cf-email">Email *</label><input type="email" id="cf-email" name="email" placeholder="you@company.com" required/></div>
+          </div>
+          <div class="form-group"><label for="cf-org">Company / Organization</label><input type="text" id="cf-org" name="organization" placeholder="Where are you reaching out from?"/></div>
+          <div class="form-group"><label for="cf-message">Message *</label><textarea id="cf-message" name="message" rows="5" placeholder="Tell me about the role or opportunity..." required></textarea></div>
+          <button type="submit" class="btn btn--primary btn--lg btn--full magnetic">
+            <span>Send message</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+          <div class="form-success" id="formSuccess" role="alert" hidden>✓ Message sent! I'll respond within 24 hours.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__inner">
+
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="footer__name">Md Faiyaz Ansari</span>
+        <span class="mono footer__role">Backend Engineer · Java · Spring Boot</span>
+        <p class="footer__tagline">Building systems that scale, ship, and last.</p>
+      </div>
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <a href="#about">About</a>
+        <a href="#skills">Stack</a>
+        <a href="#work">Work</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="mono footer__copy">© 2025 Md Faiyaz Ansari — Built with Three.js, GSAP &amp; pure intent.</p>
+      <div class="footer__socials">
+        <a href="https://mdfaiyaz.netlify.app" target="_blank" rel="noopener" aria-label="Portfolio" class="footer__social footer__social--pill">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          mdfaiyaz.netlify.app
         </a>
-        <a href="https://github.com/ansfaiz" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="GitHub">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.2 11.39.6.11.82-.26.82-.57v-2.24c-3.34.73-4.04-1.41-4.04-1.41-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        <a href="https://www.linkedin.com/in/md-faiyaz-ansari-6719212a4" target="_blank" rel="noopener" aria-label="LinkedIn" class="footer__social">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://github.com/ansfaiz" target="_blank" rel="noopener" aria-label="GitHub" class="footer__social">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
         </a>
       </div>
     </div>
-  </footer>
 
-  <script src="script.js"></script>
+  </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
